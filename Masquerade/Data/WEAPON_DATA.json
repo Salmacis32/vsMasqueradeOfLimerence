@@ -1,0 +1,107 @@
+{
+  "2402": [
+    {
+      "level": 1,
+      "sealable": true,
+      "bulletType": "AXE",
+      "price": 10,
+      "name": "NOT AXE",
+      "description": "Not the AXE, something else... something Sinister...",
+      "tips": "Ignores: Duration.",
+      "texture": "items",
+      "frameName": "Axe.png",
+      "isUnlocked": true,
+      "poolLimit": 70,
+      "rarity": 100,
+      "interval": 4000,
+      "repeatInterval": 200,
+      "power": 2,
+      "area": 1,
+      "speed": 1,
+      "amount": 1,
+      "penetrating": 3,
+      "duration": 2000,
+      "hitsWalls": false,
+      "critChance": 0.3,
+      "critMul": 2,
+      "contentGroup": "EXTRA"
+    },
+    {
+      "amount": 1
+    },
+    {
+      "power": 2
+    },
+    {
+      "penetrating": 2
+    },
+    {
+      "amount": 1
+    },
+    {
+      "power": 2
+    },
+    {
+      "penetrating": 2
+    },
+    {
+      "power": 2
+    }
+  ],
+  "2403": [
+    {
+      "level": 1,
+      "sealable": true,
+      "bulletType": "AXE",
+      "price": 10,
+      "name": "AXE 3",
+      "description": "What happened to AXE 2...?",
+      "tips": "Ignores: Duration.",
+      "texture": "items",
+      "frameName": "Axe.png",
+      "isUnlocked": true,
+      "poolLimit": 70,
+      "rarity": 100,
+      "interval": 4000,
+      "repeatInterval": 200,
+      "power": 2,
+      "area": 1,
+      "speed": 1,
+      "amount": 1,
+      "penetrating": 3,
+      "duration": 2000,
+      "hitsWalls": false,
+      "critChance": 0.3,
+      "critMul": 2,
+      "contentGroup": "EXTRA"
+    },
+    {
+      "level": 2,
+      "amount": 1
+    },
+    {
+      "level": 3,
+      "power": 2
+    },
+    {
+      "level": 4,
+      "penetrating": 2
+    },
+    {
+      "level": 5,
+      "amount": 1
+    },
+    {
+      "level": 6,
+      "power": 2
+    },
+    {
+      "level": 7,
+      "penetrating": 2
+    },
+    {
+      "level": 8,
+      "power": 2
+    }
+  ]
+}

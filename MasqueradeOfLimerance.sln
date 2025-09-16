@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36408.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasqUI", "MasqUI\MasqUI.csproj", "{6498078D-8C9A-4B9B-BF81-A5A1F5D8B628}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masquerade", "Masquerade\Masquerade.csproj", "{220AC616-EACE-4014-BDDC-8C44DBC9E9F0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6498078D-8C9A-4B9B-BF81-A5A1F5D8B628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6498078D-8C9A-4B9B-BF81-A5A1F5D8B628}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6498078D-8C9A-4B9B-BF81-A5A1F5D8B628}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6498078D-8C9A-4B9B-BF81-A5A1F5D8B628}.Release|Any CPU.Build.0 = Release|Any CPU
+		{220AC616-EACE-4014-BDDC-8C44DBC9E9F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{220AC616-EACE-4014-BDDC-8C44DBC9E9F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{220AC616-EACE-4014-BDDC-8C44DBC9E9F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{220AC616-EACE-4014-BDDC-8C44DBC9E9F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0E92234F-CE54-44B7-8B91-A878E74CA5CA}
+	EndGlobalSection
+EndGlobal

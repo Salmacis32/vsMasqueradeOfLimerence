@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Profile 1": {
+      "commandName": "Executable",
+      "executablePath": "F:\\SteamLibrary\\steamapps\\common\\Vampire Survivors\\VampireSurvivors.exe",
+      "commandLineArgs": "--melonloader.launchdebugger\r\n--melonloader.debug"
+    }
+  }
+}
