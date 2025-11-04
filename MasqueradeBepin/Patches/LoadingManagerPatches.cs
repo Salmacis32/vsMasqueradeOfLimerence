@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using VampireSurvivors.Data;
 using VampireSurvivors.Framework.DLC;
 
 namespace MasqueradeBepin.Patches
@@ -24,7 +25,7 @@ namespace MasqueradeBepin.Patches
         {
             DlcData data = ScriptableObject.CreateInstance<DlcData>();
             data._DlcType = Common.VSML_DLC_TYPE; data._Title = "Masquerade of Limerence";
-            data._ContentGroupType = VampireSurvivors.Data.ContentGroupType.BASE; data._ExpectedVersion = Common.BMD_VERSION;
+            data._ContentGroupType = ContentGroupType.EXTRA; data._ExpectedVersion = Common.BMD_VERSION;
             data._HasBeenReleased = true; 
             DlcSystem.DlcCatalog._DlcData.TryAdd(Common.VSML_DLC_TYPE, data);
             DlcSystem.SelectedDlc.TryAdd(Common.VSML_DLC_TYPE, true);
