@@ -1,5 +1,4 @@
-﻿using HarmonyLib;
-using Il2CppNewtonsoft.Json.Linq;
+﻿using Il2CppNewtonsoft.Json.Linq;
 using Il2CppSystem.Reflection;
 using Il2CppVampireSurvivors.App.Data;
 using Il2CppVampireSurvivors.Data;
@@ -12,26 +11,24 @@ using Masquerade.Factories;
 using UnityEngine;
 using Il2Col = Il2CppSystem.Collections.Generic;
 using MelonLoader;
-using UnityEngine.AddressableAssets;
-using Il2CppCysharp.Threading.Tasks;
-using UnityEngine.ResourceManagement.AsyncOperations;
+using HarmonyLib;
 
 namespace Masquerade.Patches
 {
     /// <summary>
     /// Patches for the LoadingManager class. Creates all of the data into the DLC asset bundle and loads the manifest into the game.
     /// </summary>
-    [HarmonyPatch(typeof(LoadingManager))]
+    //[HarmonyPatch(typeof(LoadingManager))]
     public static class LoadingManagerPatches
     {
         private const string BMD_NAME = "BundleManifestData - Masquerade";
-        private const string BMD_VERSION = "1.0.0";
+        private const string BMD_VERSION = "0.0.2";
         private const string BMD_LOG = "Masquerade of Limerance - Version ";
         private const DlcType VSML_DLC_TYPE = (DlcType)10000;
         public static bool ModLoaded;
 
-        [HarmonyPatch(nameof(LoadingManager.ValidateVersion))]
-        [HarmonyPostfix]
+        //[HarmonyPatch(nameof(LoadingManager.ValidateVersion))]
+        //[HarmonyPostfix]
         private static void AddManifest(object[] __args, MethodBase __originalMethod, object __instance)
         {
             if (ModLoaded) return;
@@ -49,14 +46,18 @@ namespace Masquerade.Patches
             var modDlcData = ScriptableObject.CreateInstance<BundleManifestData>();
             modDlcData._Version = BMD_VERSION; modDlcData.name = BMD_NAME; modDlcData._DataFiles = new DataManagerSettings();
 
-            MelonLogger.Msg("Loading custom weapon assets");
-            WeaponAdder(modDlcData, VSML_DLC_TYPE);
-            MelonLogger.Msg("Custom weapon assets loaded!");
-
-            MelonLogger.Msg("Loading custom music assets");
-            MusicAdder(modDlcData);
-            MelonLogger.Msg("Custom music assets loaded!");
-
+            if (vsMLCore.ShouldLoadWeapons)
+            {
+                MelonLogger.Msg("Loading custom weapon assets");
+                WeaponAdder(modDlcData, VSML_DLC_TYPE);
+                MelonLogger.Msg("Custom weapon assets loaded!");
+            }
+            if (vsMLCore.ShouldLoadMusic)
+            {
+                MelonLogger.Msg("Loading custom music assets");
+                MusicAdder(modDlcData);
+                MelonLogger.Msg("Custom music assets loaded!");
+            }
             MelonLogger.Msg("Applying Bundle to Game");
             DlcSystem.MountedPaths.Add(VSML_DLC_TYPE, String.Empty);
             DlcSystem.LoadedDlc.TryAdd(VSML_DLC_TYPE, modDlcData);
@@ -84,14 +85,14 @@ namespace Masquerade.Patches
         private static void MusicAdder(BundleManifestData manifestData)
         {
             TextAsset textAsset = new TextAsset(vsMLCore.MusicJson);
-            TextAsset albumAsset = new TextAsset(vsMLCore.AlbumJson);
-            var bytes = File.ReadAllBytes("F:\\SteamLibrary\\steamapps\\common\\Vampire Survivors\\UserData\\CustomAudio\\PacmanCE\\pacalbum.png");
-            var album = new Texture2D(256, 256);
-            ImageConversion.LoadImage(album, bytes);
-            var handle = Addressables.LoadAssetAsync<Texture2D>(album);
+            //TextAsset albumAsset = new TextAsset(vsMLCore.AlbumJson);
+            //var bytes = File.ReadAllBytes("F:\\SteamLibrary\\steamapps\\common\\Vampire Survivors\\UserData\\CustomAudio\\PacmanCE\\pacalbum.png");
+            //var album = new Texture2D(256, 256);
+            //ImageConversion.LoadImage(album, bytes);
+            //var handle = Addressables.LoadAssetAsync<Texture2D>(album);
             manifestData.DataFiles._MusicDataJsonAsset = textAsset;
             manifestData._DynamicSoundGroup = DynamicSoundGroupFactory.DefaultModdedGroup();
-            manifestData.DataFiles._AlbumDataJsonAsset = albumAsset;
+            //manifestData.DataFiles._AlbumDataJsonAsset = albumAsset;
             manifestData._AssetReferenceLibrary = new AssetReferenceLibrary();
             manifestData._AssetReferenceLibrary._AssetRefs = new AssetReferenceLibrary.AssetRefsDictionary();
         }

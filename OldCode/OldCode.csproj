@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\musicData_Modded.json" />
+    <EmbeddedResource Include="Data\WEAPON_DATA.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Data\ALBUM_DATA.json" />
+  </ItemGroup>
+
+</Project>

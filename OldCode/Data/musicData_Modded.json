@@ -1,0 +1,20 @@
+{
+  "1410": {
+    "title": "Mob Smash",
+    "author": "Yoshihito Yano",
+    "source": "",
+    "unlockedByStage": null,
+    "unlockedByCharacter": null,
+    "unlockedByItem": null,
+    "isUnlocked": true,
+    "icon": "stage_moonspell_icon.png",
+    "hyperMod": {
+      "rate": 1.0625,
+      "detune": 0
+    },
+    "forsakenMod": {
+      "rate": 1.125,
+      "detune": -1000
+    }
+  }
+}

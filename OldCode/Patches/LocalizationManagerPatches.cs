@@ -1,5 +1,4 @@
-﻿using HarmonyLib;
-using Il2CppI2.Loc;
+﻿using Il2CppI2.Loc;
 using System.Text;
 
 namespace Masquerade.Patches
@@ -7,7 +6,7 @@ namespace Masquerade.Patches
     /// <summary>
     /// Harmony patches for the LocalizationManager class
     /// </summary>
-    [HarmonyPatch(typeof(LocalizationManager))]
+    //[HarmonyPatch(typeof(LocalizationManager))]
     public static class LocalizationManagerPatches
     {
         public static LanguageSourceData Source;
@@ -24,8 +23,8 @@ namespace Masquerade.Patches
         /// I'm not sure if this is the best place to do this, but it works for now.
         /// LanguageSourceData needs more investigation so that this can possibly be better.
         /// </remarks>
-        [HarmonyPatch(nameof(LocalizationManager.UpdateSources))]
-        [HarmonyPostfix]
+        //[HarmonyPatch(nameof(LocalizationManager.UpdateSources))]
+        //[HarmonyPostfix]
         public static void GetTransPost()
         {
             if (LocalizationManager.Sources.Count == 0) return;

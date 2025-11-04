@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>MyFirstPlugin</AssemblyName>
+    <Product>My first plugin</Product>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RootNamespace>MyFirstPlugin</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Doozy">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Doozy.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Il2Cppmscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppSystem">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Il2CppSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="PauseSystem">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\PauseSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="PhaserPort">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\PhaserPort.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\UnityEngine.UIElementsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="VampireSurvivors.Runtime">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\VampireSurvivors.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\plugins&quot;" />
+  </Target>
+</Project>

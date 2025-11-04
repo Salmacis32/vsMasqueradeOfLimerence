@@ -1,0 +1,95 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>MasqueradeBepin</AssemblyName>
+    <Product>My first plugin</Product>
+    <Version>1.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <RestoreAdditionalProjectSources>
+      https://api.nuget.org/v3/index.json;
+      https://nuget.bepinex.dev/v3/index.json;
+      https://nuget.samboy.dev/v3/index.json
+    </RestoreAdditionalProjectSources>
+    <RootNamespace>MasqueradeBepin</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Doozy">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Doozy.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\DOTween.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween.Modules">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\DOTween.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTweenPro">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\DOTweenPro.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTweenPro.Scripts">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\DOTweenPro.Scripts.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\core\Il2CppInterop.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Il2Cppmscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="Il2CppSystem">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Il2CppSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="l2localization">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\l2localization.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.UnityConverters">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Newtonsoft.Json.UnityConverters.dll</HintPath>
+    </Reference>
+    <Reference Include="PauseSystem">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\PauseSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="PhaserPort">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\PhaserPort.dll</HintPath>
+    </Reference>
+    <Reference Include="Rewired_Core">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Rewired_Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Rewired_CSharp">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Rewired_CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rewired_Windows">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Rewired_Windows.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Burst">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Unity.Burst.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\Unity.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="VampireSurvivors.Runtime">
+      <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\interop\VampireSurvivors.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="COPY &quot;$(TargetPath)&quot; &quot;R:\SteamLibrary\steamapps\common\Vampire Survivors\BepInEx\plugins&quot;" />
+  </Target>
+</Project>
