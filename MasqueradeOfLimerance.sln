@@ -13,10 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OldCode", "OldCode\OldCode.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VampireSurvivors.Runtime", "..\vsruntime\vsruntime\VampireSurvivors.Runtime.csproj", "{E7157CA8-A9DC-8A7B-97FD-DFE3C94A5AE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFirstPlugin", "MyFirstPlugin\MyFirstPlugin.csproj", "{5ACBB2D0-CAB9-BECB-6D9B-C928A13BF819}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasqueradeBepin", "MasqueradeBepin\MasqueradeBepin.csproj", "{7CD3D5B1-C4BA-32CB-88EB-D3CA23124638}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,9 +20,11 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6498078D-8C9A-4B9B-BF81-A5A1F5D8B628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6498078D-8C9A-4B9B-BF81-A5A1F5D8B628}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6498078D-8C9A-4B9B-BF81-A5A1F5D8B628}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6498078D-8C9A-4B9B-BF81-A5A1F5D8B628}.Release|Any CPU.Build.0 = Release|Any CPU
 		{220AC616-EACE-4014-BDDC-8C44DBC9E9F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{220AC616-EACE-4014-BDDC-8C44DBC9E9F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{220AC616-EACE-4014-BDDC-8C44DBC9E9F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CF6DDE8-1FBD-3502-9BFE-5422F7EC8938}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5CF6DDE8-1FBD-3502-9BFE-5422F7EC8938}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -34,14 +32,6 @@ Global
 		{CF180188-7B09-44A8-89D8-8F0BEE5E3CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7157CA8-A9DC-8A7B-97FD-DFE3C94A5AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E7157CA8-A9DC-8A7B-97FD-DFE3C94A5AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5ACBB2D0-CAB9-BECB-6D9B-C928A13BF819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5ACBB2D0-CAB9-BECB-6D9B-C928A13BF819}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5ACBB2D0-CAB9-BECB-6D9B-C928A13BF819}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5ACBB2D0-CAB9-BECB-6D9B-C928A13BF819}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7CD3D5B1-C4BA-32CB-88EB-D3CA23124638}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7CD3D5B1-C4BA-32CB-88EB-D3CA23124638}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7CD3D5B1-C4BA-32CB-88EB-D3CA23124638}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7CD3D5B1-C4BA-32CB-88EB-D3CA23124638}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
