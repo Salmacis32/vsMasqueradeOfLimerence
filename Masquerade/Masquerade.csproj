@@ -28,6 +28,7 @@
 		<Compile Include="Models\ModAccessory.cs" />
 		<Compile Include="Models\ModComponent.cs" />
 		<Compile Include="Models\ModContent.cs" />
+		<Compile Include="Models\ModEquipment.cs" />
 		<Compile Include="Models\PatchInstruction.cs" />
 		<Compile Include="Patches\DlcLoaderPatches.cs" />
 		<Compile Include="Patches\LicenseManagerPatches.cs" />

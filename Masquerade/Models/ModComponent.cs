@@ -1,8 +1,12 @@
-﻿using Il2Cpp;
+﻿using Il2CppInterop.Runtime.InteropTypes.Fields;
+using MelonLoader;
+using UnityEngine;
 
 namespace Masquerade.Models
 {
-    public abstract class ModComponent : GameMonoBehaviour
+    [RegisterTypeInIl2Cpp]
+    public class ModComponent(IntPtr ptr) : MonoBehaviour(ptr)
     {
+        public Il2CppValueField<int> ContentId;
     }
 }

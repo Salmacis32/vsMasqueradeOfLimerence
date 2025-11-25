@@ -4,6 +4,7 @@ using Il2CppVampireSurvivors.App.Data;
 using Il2CppVampireSurvivors.Data;
 using Il2CppVampireSurvivors.Framework.DLC;
 using Masquerade.Content;
+using Il2CppVampireSurvivors.Data.Weapons;
 
 namespace Masquerade.Patches
 {
@@ -54,8 +55,32 @@ namespace Masquerade.Patches
         private static BundleManifestData CreateBundle()
         {
             var modDlcData = ScriptableObject.CreateInstance<BundleManifestData>();
-            modDlcData._Version = Common.BMD_VERSION; modDlcData.name = Common.BMD_NAME; modDlcData._DataFiles = new DataManagerSettings();
+            modDlcData._Version = Common.BMD_VERSION; modDlcData.name = Common.BMD_NAME;
+            modDlcData._DataFiles = PopulateDataSettings();
             return modDlcData;
+        }
+
+        private static DataManagerSettings PopulateDataSettings()
+        {
+            var settings = new DataManagerSettings();
+
+            settings._WeaponDataJsonAsset = PopulateWeaponData();
+
+            return settings;
+        }
+
+        private static TextAsset PopulateWeaponData()
+        {
+
+            var weaponData = new TextAsset();
+            var dictionary = new Dictionary<WeaponType, List<WeaponData>>();
+
+            foreach (var accessory in Masquerade.Api.AccessoryFactory.GetAllContent())
+            {
+
+            }
+
+            return weaponData;
         }
     }
 }

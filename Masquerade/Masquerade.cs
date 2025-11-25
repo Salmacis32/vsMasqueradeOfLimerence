@@ -81,7 +81,7 @@ namespace Masquerade
 
         private int PopulateAccessories()
         {
-            Api.AccessoryFactory.AddContent(new ExampleAccessory() { Mod = typeof(Masquerade), ContentId = 0 });
+            Api.AccessoryFactory.AddContent(new ExampleAccessory() { Mod = typeof(Masquerade), ContentId = 10000 });
             return 1;
         }
 
