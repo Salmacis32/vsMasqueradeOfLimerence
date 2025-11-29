@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Masquerade;
 using Masquerade.Api;
-using Masquerade.Content;
+using Masquerade.Examples;
 using Masquerade.Models;
 using MelonLoader;
 using System.Reflection;

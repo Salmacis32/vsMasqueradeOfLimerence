@@ -22,13 +22,17 @@
 	<ItemGroup>
 		<Compile Include="Api\ContentApi.cs" />
 		<Compile Include="Common.cs" />
-		<Compile Include="Content\ExampleAccessory.cs" />
+		<Compile Include="Examples\ExampleAccessory.cs" />
+		<Compile Include="Equipment\CharacterModifierStats.cs" />
+		<Compile Include="Equipment\EquipmentStats.cs" />
+		<Compile Include="Equipment\LevelUp.cs" />
 		<Compile Include="Models\ContentFactory.cs" />
+		<Compile Include="Equipment\ShopTags.cs" />
+		<Compile Include="Equipment\WeaponStats.cs" />
 		<Compile Include="Models\IClassPatcher.cs" />
-		<Compile Include="Models\ModAccessory.cs" />
-		<Compile Include="Models\ModComponent.cs" />
-		<Compile Include="Models\ModContent.cs" />
-		<Compile Include="Models\ModEquipment.cs" />
+		<Compile Include="ModAccessory.cs" />
+		<Compile Include="ModContent.cs" />
+		<Compile Include="ModEquipment.cs" />
 		<Compile Include="Models\PatchInstruction.cs" />
 		<Compile Include="Patches\DlcLoaderPatches.cs" />
 		<Compile Include="Patches\LicenseManagerPatches.cs" />
@@ -113,6 +117,10 @@
 	  <Reference Include="UnityEngine.CoreModule">
 	    <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\MelonLoader\Il2CppAssemblies\UnityEngine.CoreModule.dll</HintPath>
 	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Constants\" />
 	</ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

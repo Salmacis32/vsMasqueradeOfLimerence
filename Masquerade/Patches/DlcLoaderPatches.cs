@@ -3,7 +3,7 @@ using UnityEngine;
 using Il2CppVampireSurvivors.App.Data;
 using Il2CppVampireSurvivors.Data;
 using Il2CppVampireSurvivors.Framework.DLC;
-using Masquerade.Content;
+using Masquerade.Examples;
 using Il2CppVampireSurvivors.Data.Weapons;
 
 namespace Masquerade.Patches
