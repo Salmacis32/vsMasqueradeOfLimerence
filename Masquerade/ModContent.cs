@@ -2,7 +2,7 @@
 {
     public abstract class ModContent
     {
-        public Type Mod { get; internal set; }
+        public MasqMod Mod { get; internal set; }
         internal int ContentId;
         public virtual string ContentName { get => GetType().Name; }
 

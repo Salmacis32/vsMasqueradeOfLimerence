@@ -3,6 +3,7 @@ using Masquerade;
 using Masquerade.Api;
 using Masquerade.Examples;
 using Masquerade.Models;
+using Masquerade.Systems;
 using MelonLoader;
 using System.Reflection;
 
@@ -11,7 +12,7 @@ using System.Reflection;
 
 namespace Masquerade
 {
-    public class Masquerade : MelonMod
+    public class Masquerade : MasqMod
     {
         /// <summary>
         /// Harmony assembly
@@ -20,9 +21,12 @@ namespace Masquerade
         internal static HarmonyLib.Harmony PatcherInstance;
         internal static IEnumerable<IClassPatcher> Patchers;
         internal static MelonLogger.Instance Logger;
-        public static bool MasqueradeInitialized;
-        public static MasqueradeApi Api;
-        public static Masquerade Instance;
+        public static bool MasqueradeInitialized { get; private set; }
+        public static MasqueradeApi Api { get; private set; }
+        public static Masquerade Instance { get; private set; }
+        /// Dipswitches
+        public static bool IgnoreWeaponsGlobal { get; private set; }
+
 
         public override void OnDeinitializeMelon()
         {
@@ -69,7 +73,7 @@ namespace Masquerade
         {
             LoggerInstance.Msg("Populating Content factories...");
 
-            Api.LoadedMods = Api.LoadedMods.AddItem(typeof(Masquerade));
+            Api.LoadedMods = Api.LoadedMods.AddItem(this);
             var contentTypes = PopulateAccessories();
 
             LoggerInstance.Msg($"Content factories populated. Populated {contentTypes} content type(s).");
@@ -81,7 +85,7 @@ namespace Masquerade
 
         private int PopulateAccessories()
         {
-            Api.AccessoryFactory.AddContent(new ExampleAccessory() { Mod = typeof(Masquerade), ContentId = 10000 });
+            Api.AccessoryFactory.AddContent(new ExampleAccessory() { Mod = this, ContentId = 10000 });
             return 1;
         }
 

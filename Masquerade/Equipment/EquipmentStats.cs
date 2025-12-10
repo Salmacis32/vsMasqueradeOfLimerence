@@ -1,9 +1,9 @@
 ﻿namespace Masquerade.Equipment
 {
-    public struct EquipmentStats
+    public static class EquipmentStats
     {
         /// <summary>
-        /// The damage factor of the weapons.
+        /// The damage factor of weapons.
         /// </summary>
         /// <value>
         /// power
@@ -11,9 +11,9 @@
         /// <remarks>
         /// Default: 1f
         /// </remarks>
-        public float Power { get; set; }
+        public const string Power = "power";
         /// <summary>
-        /// The area factor of the weapons.
+        /// The area factor of weapons.
         /// </summary>
         /// <value>
         /// area
@@ -21,7 +21,7 @@
         /// <remarks>
         /// Default: 1f
         /// </remarks>
-        public float Area { get; set; }
+        public const string Area = "area";
         /// <summary>
         /// The speed factor of the projectile spawned by weapons.
         /// </summary>
@@ -31,7 +31,7 @@
         /// <remarks>
         /// Default: 1f
         /// </remarks>
-        public float Speed { get; set; }
+        public const string ProjectileSpeed = "speed";
         /// <summary>
         /// The amount of times the weapon or weapons will re-fire before cooldown.
         /// </summary>
@@ -41,7 +41,7 @@
         /// <remarks>
         /// Default: 1
         /// </remarks>
-        public int Amount { get; set; }
+        public const string Amount = "amount";
         /// <summary>
         /// The amount of time each individual use of the weapon or weapons takes.
         /// </summary>
@@ -52,16 +52,6 @@
         /// Must be set for weapons to fire.
         /// Default: 1000f
         /// </remarks>
-        public float Duration { get; set; }
-        /* Move this to ModWeapon
-        public EquipmentStats()
-        {
-            Power = 1f;
-            Area = 1f;
-            Speed = 1f;
-            Amount = 1;
-            Duration = 1000f;
-        }
-        */
+        public const string Duration = "duration";
     }
 }

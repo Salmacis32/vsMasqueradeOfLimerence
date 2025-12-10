@@ -1,5 +1,4 @@
 ﻿using Masquerade.Equipment;
-using Masquerade.Stats;
 
 namespace Masquerade.Examples
 {
@@ -7,14 +6,9 @@ namespace Masquerade.Examples
     {
         public override string DisplayName => "Example Accessory";
 
-        protected override ICollection<LevelUp> PopulateLevelUps()
+        public ExampleAccessory() : base()
         {
-            var levelUps = new HashSet<LevelUp>();
-
-            var increase = new CharacterModifierStats() { MaxHealth = 100 };
-            levelUps.Add(new LevelUp(2).IncreaseStats(increase));
-
-            return levelUps;
+            StatGrowth.Add(new StatGrowthInfo(1, 6, CharacterStats.MaxHp, 100));
         }
     }
 }

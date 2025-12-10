@@ -1,10 +1,12 @@
-﻿using Il2CppVampireSurvivors.Objects;
-using Masquerade.Stats;
+﻿using Masquerade.Equipment;
 
 namespace Masquerade
 {
     public abstract class ModAccessory : ModEquipment
     {
-        public virtual CharacterModifierStats StartingModifierStats { get; protected set; }
+        public ModAccessory() : base()
+        {
+            LevelUpInfo.Add(new LevelUpInfo(1, "isPowerup", true));
+        }
     }
 }

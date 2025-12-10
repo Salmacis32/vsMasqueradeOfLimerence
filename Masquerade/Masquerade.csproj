@@ -20,28 +20,29 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="Api\ContentApi.cs" />
+		<Compile Include="Api\Content.cs" />
+		<Compile Include="Api\Mod.cs" />
 		<Compile Include="Common.cs" />
+		<Compile Include="Equipment\LevelUpInfo.cs" />
+		<Compile Include="ExceptionMessages.cs" />
 		<Compile Include="Examples\ExampleAccessory.cs" />
-		<Compile Include="Equipment\CharacterModifierStats.cs" />
+		<Compile Include="Equipment\CharacterStats.cs" />
 		<Compile Include="Equipment\EquipmentStats.cs" />
-		<Compile Include="Equipment\LevelUp.cs" />
+		<Compile Include="Equipment\StatGrowthInfo.cs" />
 		<Compile Include="Models\ContentFactory.cs" />
 		<Compile Include="Equipment\ShopTags.cs" />
 		<Compile Include="Equipment\WeaponStats.cs" />
 		<Compile Include="Models\IClassPatcher.cs" />
 		<Compile Include="ModAccessory.cs" />
 		<Compile Include="ModContent.cs" />
+		<Compile Include="MasqMod.cs" />
 		<Compile Include="ModEquipment.cs" />
 		<Compile Include="Models\PatchInstruction.cs" />
 		<Compile Include="Patches\DlcLoaderPatches.cs" />
 		<Compile Include="Patches\LicenseManagerPatches.cs" />
 		<Compile Include="Patches\LoadingManagerPatches.cs" />
 		<Compile Include="Masquerade.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\MelonLoader-AudioTools\AudioImportLib\AudioImportLib.csproj" />
+		<Compile Include="Systems\WeaponDataSystem.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -105,6 +106,9 @@
 	  <Reference Include="MelonLoader">
 	    <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\MelonLoader\net6\MelonLoader.dll</HintPath>
 	  </Reference>
+	  <Reference Include="Newtonsoft.Json">
+	    <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\MelonLoader\net6\Newtonsoft.Json.dll</HintPath>
+	  </Reference>
 	  <Reference Include="Unity.Burst">
 	    <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\MelonLoader\Il2CppAssemblies\Unity.Burst.dll</HintPath>
 	  </Reference>
@@ -117,10 +121,6 @@
 	  <Reference Include="UnityEngine.CoreModule">
 	    <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\MelonLoader\Il2CppAssemblies\UnityEngine.CoreModule.dll</HintPath>
 	  </Reference>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Constants\" />
 	</ItemGroup>
 	
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

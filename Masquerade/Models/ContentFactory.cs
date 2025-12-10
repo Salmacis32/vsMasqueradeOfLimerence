@@ -1,4 +1,6 @@
-﻿namespace Masquerade.Models
+﻿using MelonLoader;
+
+namespace Masquerade.Models
 {
     internal sealed class ContentFactory<T> where T : ModContent
     {
@@ -28,7 +30,7 @@
 
         internal T GetContent(int ContentId) => _content.SingleOrDefault(x => x.ContentId == ContentId);
 
-        internal T GetContent(Type Mod, string ContentName) => _content.SingleOrDefault(x => x.ContentName == ContentName && x.Mod == Mod);
+        internal T GetContent(MasqMod Mod, string ContentName) => _content.SingleOrDefault(x => x.ContentName == ContentName && x.Mod == Mod);
 
         internal Y GetContent<Y>() where Y : T => _content.SingleOrDefault(x => x.GetType() == typeof(Y)) as Y;
     }

@@ -5,6 +5,9 @@ using Il2CppVampireSurvivors.Data;
 using Il2CppVampireSurvivors.Framework.DLC;
 using Masquerade.Examples;
 using Il2CppVampireSurvivors.Data.Weapons;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Masquerade.Systems;
 
 namespace Masquerade.Patches
 {
@@ -38,7 +41,7 @@ namespace Masquerade.Patches
             Masquerade.Logger.Msg("Created modded dlc bundle.");
 
             ManifestLoader.LoadManifest(modDlcData, Common.VSML_DLC_TYPE, action);
-            var modAccessory = Masquerade.Api.GetModAccessory(typeof(Masquerade), nameof(ExampleAccessory));
+            var modAccessory = Masquerade.Api.GetModAccessory(Masquerade.Instance, nameof(ExampleAccessory));
             Masquerade.Logger.Msg($"Acknlowedging mod accessory Id {modAccessory.ContentId}: {modAccessory.FullName}");
             var modAccessoryGen = Masquerade.Api.GetModAccessory<ExampleAccessory>();
             Masquerade.Logger.Msg($"Acknlowedging mod accessory (from generic method) Id {modAccessoryGen.ContentId}: {modAccessoryGen.FullName}");
@@ -64,21 +67,22 @@ namespace Masquerade.Patches
         {
             var settings = new DataManagerSettings();
 
-            settings._WeaponDataJsonAsset = PopulateWeaponData();
+            if (!Masquerade.IgnoreWeaponsGlobal)
+            {
+                settings._WeaponDataJsonAsset = PopulateWeaponData(null);
+            }
 
             return settings;
         }
 
-        private static TextAsset PopulateWeaponData()
+        private static TextAsset PopulateWeaponData(IDictionary<int, JArray> modData)
         {
-
-            var weaponData = new TextAsset();
-            var dictionary = new Dictionary<WeaponType, List<WeaponData>>();
-
-            foreach (var accessory in Masquerade.Api.AccessoryFactory.GetAllContent())
-            {
-
-            }
+            // this is just testing
+            var dict = new Dictionary<MasqMod, IEnumerable<ModEquipment>>();
+            dict.Add(Masquerade.Instance, Masquerade.Api.AccessoryFactory.GetAllContent());
+            var generation = WeaponDataSystem.GenerateCustomWeaponData(dict);
+            var weaponData = new TextAsset(JsonConvert.SerializeObject(generation));
+            Masquerade.Logger.Msg(weaponData.text);
 
             return weaponData;
         }
