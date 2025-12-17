@@ -1,6 +1,6 @@
 <Project>
   <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
 	<PropertyGroup>
-		<VSPath>C:\Program Files (x86)\Steam\steamapps\common\VSModded</VSPath>
+		<VSPath>C:\Program Files (x86)\Steam\steamapps\common\VSModded\TryMe</VSPath>
 	</PropertyGroup>
 </Project>
