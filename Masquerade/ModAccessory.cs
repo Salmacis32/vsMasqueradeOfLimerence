@@ -6,7 +6,7 @@ namespace Masquerade
     {
         public ModAccessory() : base()
         {
-            LevelUpInfo.Add(new LevelUpInfo(1, "isPowerup", true));
+            AddLevelUp(1, "isPowerup", true);
         }
     }
 }

@@ -6,9 +6,11 @@ namespace Masquerade.Examples
     {
         public override string DisplayName => "Example Accessory";
 
+        public override int MaxLevel => 6;
+
         public ExampleAccessory() : base()
         {
-            StatGrowth.Add(new StatGrowthInfo(1, 6, CharacterStats.MaxHp, 100));
+            AddStatGrowth(minLevel: 1, maxLevel: 6, CharacterStats.MaxHp, value: 100);
         }
     }
 }

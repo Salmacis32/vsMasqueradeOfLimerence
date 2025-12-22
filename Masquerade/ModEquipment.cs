@@ -33,5 +33,30 @@ namespace Masquerade
         public virtual string Tips { get; protected set; } = string.Empty;
 
         public virtual ICollection<StatGrowthInfo> StatGrowth { get; protected set; }
+
+        protected void AddLevelUp(int atLevel, string stat, float value)
+        {
+            AddLevelUp(new LevelUpInfo(atLevel, stat, value));
+        }
+
+        protected void AddLevelUp(int atLevel, string state, bool setTrue)
+        {
+            AddLevelUp(new LevelUpInfo(atLevel, state, setTrue));
+        }
+
+        protected void AddLevelUp(LevelUpInfo levelUpInfo)
+        {
+            LevelUpInfo.Add(levelUpInfo);
+        }
+
+        protected void AddStatGrowth(int minLevel, int maxLevel, string stat, float value, int levelInterval = 1)
+        {
+            AddStatGrowth(new StatGrowthInfo(minLevel, maxLevel, stat, value, levelInterval));
+        }
+
+        protected void AddStatGrowth(StatGrowthInfo statGrowthInfo)
+        {
+            StatGrowth.Add(statGrowthInfo);
+        }
     }
 }
