@@ -35,6 +35,12 @@ namespace Masquerade.Systems
                     tokenWriter.WritePropertyName(stat.StatName);
                     tokenWriter.WriteValue(stat.StatValue);
                 }
+                var levelUp = eq.LevelUpInfo.Where(x => x.Level == l);
+                foreach (var change in levelUp.SelectMany(x => x.StatChanges))
+                {
+                    tokenWriter.WritePropertyName(change.Key);
+                    tokenWriter.WriteValue(change.Value);
+                }
                 tokenWriter.WriteEndObject();
             }
             tokenWriter.WriteEndArray();
