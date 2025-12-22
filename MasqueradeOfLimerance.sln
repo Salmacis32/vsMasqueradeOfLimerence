@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioImportLib", "..\MelonL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OldCode", "OldCode\OldCode.csproj", "{CF180188-7B09-44A8-89D8-8F0BEE5E3CB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VampireSurvivors.Runtime", "..\vsruntime\vsruntime\VampireSurvivors.Runtime.csproj", "{E7157CA8-A9DC-8A7B-97FD-DFE3C94A5AE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VampireSurvivors.Runtime", "..\vsruntime\vsruntime\VampireSurvivors.Runtime.csproj", "{D8F465D0-5C2B-440C-9DAF-0C839896A758}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,8 +31,8 @@ Global
 		{5CF6DDE8-1FBD-3502-9BFE-5422F7EC8938}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF180188-7B09-44A8-89D8-8F0BEE5E3CB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CF180188-7B09-44A8-89D8-8F0BEE5E3CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7157CA8-A9DC-8A7B-97FD-DFE3C94A5AE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7157CA8-A9DC-8A7B-97FD-DFE3C94A5AE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8F465D0-5C2B-440C-9DAF-0C839896A758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8F465D0-5C2B-440C-9DAF-0C839896A758}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
