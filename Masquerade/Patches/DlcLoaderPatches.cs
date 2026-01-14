@@ -1,13 +1,18 @@
-﻿using Masquerade.Models;
-using UnityEngine;
-using Il2CppVampireSurvivors.App.Data;
+﻿using Il2CppVampireSurvivors.App.Data;
 using Il2CppVampireSurvivors.Data;
-using Il2CppVampireSurvivors.Framework.DLC;
-using Masquerade.Examples;
 using Il2CppVampireSurvivors.Data.Weapons;
+using Il2CppVampireSurvivors.Framework;
+using Il2CppVampireSurvivors.Framework.DLC;
+using Il2CppVampireSurvivors.Objects;
+using Il2CppVampireSurvivors.Objects.Weapons;
+using Il2CppZenject;
+using Masquerade.Examples;
+using Masquerade.Models;
+using Masquerade.Systems;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Masquerade.Systems;
+using System.Xml.Linq;
+using UnityEngine;
 
 namespace Masquerade.Patches
 {
@@ -41,8 +46,6 @@ namespace Masquerade.Patches
             Masquerade.Logger.Msg("Created modded dlc bundle.");
 
             ManifestLoader.LoadManifest(modDlcData, Common.VSML_DLC_TYPE, action);
-            var modAccessory = Masquerade.Api.GetModAccessory(Masquerade.Instance, nameof(ExampleAccessory));
-            Masquerade.Logger.Msg($"Acknlowedging mod accessory Id {modAccessory.ContentId}: {modAccessory.FullName}");
             var modAccessoryGen = Masquerade.Api.GetModAccessory<ExampleAccessory>();
             Masquerade.Logger.Msg($"Acknlowedging mod accessory (from generic method) Id {modAccessoryGen.ContentId}: {modAccessoryGen.FullName}");
             return false;
@@ -60,6 +63,10 @@ namespace Masquerade.Patches
             var modDlcData = ScriptableObject.CreateInstance<BundleManifestData>();
             modDlcData._Version = Common.BMD_VERSION; modDlcData.name = Common.BMD_NAME;
             modDlcData._DataFiles = PopulateDataSettings();
+            if (!Masquerade.IgnoreWeaponsGlobal)
+            {
+                modDlcData._AccessoriesFactory = PopulateAccessories();
+            }
             return modDlcData;
         }
 
@@ -80,11 +87,34 @@ namespace Masquerade.Patches
             // this is just testing
             var dict = new Dictionary<MasqMod, IEnumerable<ModEquipment>>();
             dict.Add(Masquerade.Instance, Masquerade.Api.AccessoryFactory.GetAllContent());
+
             var generation = WeaponDataSystem.GenerateCustomWeaponData(dict);
             var weaponData = new TextAsset(JsonConvert.SerializeObject(generation));
             Masquerade.Logger.Msg(weaponData.text);
 
             return weaponData;
+        }
+
+        private static AccessoriesFactory PopulateAccessories()
+        {
+            var factory = ScriptableObject.CreateInstance<AccessoriesFactory>();
+            var content = Masquerade.Api.AccessoryFactory.GetAllContent();
+
+            foreach (var item in content)
+            {
+                factory._accessories.Add((WeaponType)item.ContentId, CreateBaseAccessory(item));
+            }
+            
+            return factory;
+        }
+
+        private static Accessory CreateBaseAccessory(ModAccessory template)
+        {
+            var acc = ProjectContext.Instance.Container.InstantiateComponentOnNewGameObject<Accessory>();
+
+            acc.name = template.ContentId.ToString();
+
+            return acc;
         }
     }
 }
