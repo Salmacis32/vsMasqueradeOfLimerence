@@ -1,9 +1,11 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Masquerade.Equipment;
+using Newtonsoft.Json.Linq;
 
 namespace Masquerade.Systems
 {
     internal static class WeaponDataSystem
     {
+        private static readonly string[] BooleanDataNames = new string[] { WeaponStats.CanHitWalls, "isPowerup" };
         internal static IDictionary<int, JArray> GenerateCustomWeaponData(IDictionary<MasqMod, IEnumerable<ModEquipment>> equipment)
         {
             var allWeaponData = new Dictionary<int, JArray>();
@@ -39,12 +41,14 @@ namespace Masquerade.Systems
                 foreach (var change in levelUp.SelectMany(x => x.StatChanges))
                 {
                     tokenWriter.WritePropertyName(change.Key);
-                    tokenWriter.WriteValue(change.Value);
+                    tokenWriter.WriteValue((BooleanDataNames.Contains(change.Key)) ? CheckTrue(change.Value) : change.Value);
                 }
                 tokenWriter.WriteEndObject();
             }
             tokenWriter.WriteEndArray();
             return tokenWriter.Token;
         }
+
+        private static bool CheckTrue(float value) => value > 0;
     }
 }
