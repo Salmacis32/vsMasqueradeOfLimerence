@@ -1,6 +1,6 @@
 <Project>
-  <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
+  <!-- This is the default path, change this to your VS install folder -->
 	<PropertyGroup>
-		<VSPath>C:\Program Files (x86)\Steam\steamapps\common\VSModded\TryMe</VSPath>
+		<VSPath>C:\Program Files (x86)\Steam\steamapps\common\Vampire Survivors</VSPath>
 	</PropertyGroup>
 </Project>
