@@ -1,4 +1,5 @@
 ﻿using Masquerade.Equipment;
+using Masquerade.Stats;
 
 namespace Masquerade
 {
@@ -6,7 +7,9 @@ namespace Masquerade
     {
         public ModAccessory() : base()
         {
-            LevelUpInfo.Add(new LevelUpInfo(1, "isPowerup", true));
+            AddFirstLevel("isPowerup", true);
         }
+
+        public override int AppearenceRate => 90;
     }
 }

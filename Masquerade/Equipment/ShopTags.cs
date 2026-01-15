@@ -14,7 +14,7 @@
         StartsSeenByPlayer = 16,
         DoNotExcludeFromShop = 32,
         DropRateAffectedByLuck = 64,
-        Sealable = 128,
+        Unsealable = 128,
         OnlyAppliesToOwner = 256,
         DuplicatesAllowed = 512,
         StaysSpawnedWhileUnavailable = 1024
