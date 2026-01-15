@@ -100,7 +100,7 @@
 	    <HintPath>$(VSPath)\MelonLoader\net6\Il2CppInterop.Runtime.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Il2Cppl2localization">
-	    <HintPath>$(VSPath)\Il2CppAssemblies\Il2Cppl2localization.dll</HintPath>
+	    <HintPath>$(VSPath)\MelonLoader\Il2CppAssemblies\Il2Cppl2localization.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Il2Cppmscorlib">
 	    <HintPath>$(VSPath)\MelonLoader\Il2CppAssemblies\Il2Cppmscorlib.dll</HintPath>
@@ -182,9 +182,6 @@
 	  </Reference>
 	  <Reference Include="Unity.Mathematics">
 	    <HintPath>$(VSPath)\MelonLoader\Il2CppAssemblies\Unity.Mathematics.dll</HintPath>
-	  </Reference>
-	  <Reference Include="UnityEngine">
-	    <HintPath>$(VSPath)\MelonLoader\Il2CppAssemblies\UnityEngine.dll</HintPath>
 	  </Reference>
 	  <Reference Include="UnityEngine.CoreModule">
 	    <HintPath>$(VSPath)\MelonLoader\Il2CppAssemblies\UnityEngine.CoreModule.dll</HintPath>
