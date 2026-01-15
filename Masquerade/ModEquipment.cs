@@ -10,9 +10,15 @@ namespace Masquerade
             if (DisplayName is null) DisplayName = ContentName;
             LevelUpInfo = new List<LevelUpInfo>();
             StatGrowth = new List<StatGrowthInfo>();
+            AddFirstLevel("price", Price);
+            AddFirstLevel("rarity", AppearenceRate);
+
+            AddFirstLevel("isUnlocked", ShopTags.HasFlag(ShopTags.StartsUnlocked));
+            AddFirstLevel("sealable", !ShopTags.HasFlag(ShopTags.Unsealable));
+            AddFirstLevel("seen", ShopTags.HasFlag(ShopTags.StartsSeenByPlayer));
         }
 
-        public virtual int AppearenceRate { get; protected set; } = 1;
+        public virtual int AppearenceRate { get; protected set; }
         public virtual string Description { get; protected set; } = string.Empty;
         public virtual string DisplayName { get; protected set; }
 
@@ -28,7 +34,7 @@ namespace Masquerade
         public virtual int MaxLevel { get; protected set; } = 1;
         public virtual int Price { get; protected set; } = 40;
         public virtual ShopTags ShopTags { get; protected set; }
-        public virtual string TextureName { get; protected set; } = string.Empty;
+        public virtual string TextureName { get => ContentName; }
 
         public virtual string Tips { get; protected set; } = string.Empty;
 
@@ -42,6 +48,16 @@ namespace Masquerade
         protected void AddLevelUp(int atLevel, string state, bool setTrue)
         {
             AddLevelUp(new LevelUpInfo(atLevel, state, setTrue));
+        }
+
+        protected void AddFirstLevel(string stat, float value)
+        {
+            AddLevelUp(new LevelUpInfo(1, stat, value));
+        }
+
+        protected void AddFirstLevel(string state, bool setTrue)
+        {
+            AddLevelUp(new LevelUpInfo(1, state, setTrue));
         }
 
         protected void AddLevelUp(LevelUpInfo levelUpInfo)

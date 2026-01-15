@@ -1,16 +1,23 @@
-﻿using Il2CppVampireSurvivors.App.Data;
+﻿using Harmony;
+using Il2CppI2.Loc;
+using Il2CppVampireSurvivors.App.Data;
+using Il2CppVampireSurvivors.App.Tools;
 using Il2CppVampireSurvivors.Data;
 using Il2CppVampireSurvivors.Data.Weapons;
 using Il2CppVampireSurvivors.Framework;
 using Il2CppVampireSurvivors.Framework.DLC;
+using Il2CppVampireSurvivors.Graphics;
 using Il2CppVampireSurvivors.Objects;
 using Il2CppVampireSurvivors.Objects.Weapons;
 using Il2CppZenject;
 using Masquerade.Examples;
 using Masquerade.Models;
 using Masquerade.Systems;
+using Masquerade.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Reflection;
+using System.Resources;
 using System.Xml.Linq;
 using UnityEngine;
 
@@ -18,6 +25,7 @@ namespace Masquerade.Patches
 {
     public class DlcLoaderPatches : IClassPatcher
     {
+        private static LanguageSourceData LanguageData;
         public Type TargetClass => typeof(DlcLoader);
 
         public static bool PreLoadDlc(DlcLoader __instance, DlcType dlcType, Action<BundleManifestData> onComplete)
@@ -38,6 +46,7 @@ namespace Masquerade.Patches
                 DlcLoader._manifestState = ((!DlcLoader.DidTaskError(DlcLoader._manifestState)) ? DlcLoadState.Complete : DlcLoadState.Error);
                 DlcLoader._manifest = bmd;
                 DlcLoader._locationsState = DlcLoadState.Complete;
+                LoadSprites();
                 DlcLoader._spritesState = DlcLoadState.Complete;
                 DlcLoader.UpdateProgress();
                 Masquerade.Logger.Msg("Successfully loaded modded dlc bundle!");
@@ -48,6 +57,7 @@ namespace Masquerade.Patches
             ManifestLoader.LoadManifest(modDlcData, Common.VSML_DLC_TYPE, action);
             var modAccessoryGen = Masquerade.Api.GetModAccessory<ExampleAccessory>();
             Masquerade.Logger.Msg($"Acknlowedging mod accessory (from generic method) Id {modAccessoryGen.ContentId}: {modAccessoryGen.FullName}");
+            LanguageData = null;
             return false;
         }
 
@@ -58,6 +68,14 @@ namespace Masquerade.Patches
             return instructions;
         }
 
+        private static void LoadSprites()
+        {
+            var texture = TextureHelpers.LoadImageToTexture2d(Masquerade.AssemblyInstance, "Masquerade.Examples", "ExampleAccessory");
+            var sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            sprite.name = "ExampleAccessory";
+            SpriteManager.RegisterSprite(sprite);
+        }
+
         private static BundleManifestData CreateBundle()
         {
             var modDlcData = ScriptableObject.CreateInstance<BundleManifestData>();
@@ -65,6 +83,7 @@ namespace Masquerade.Patches
             modDlcData._DataFiles = PopulateDataSettings();
             if (!Masquerade.IgnoreWeaponsGlobal)
             {
+                LanguageData = LocalizationManager.Sources._items.First();
                 modDlcData._AccessoriesFactory = PopulateAccessories();
             }
             return modDlcData;
@@ -111,8 +130,15 @@ namespace Masquerade.Patches
         private static Accessory CreateBaseAccessory(ModAccessory template)
         {
             var acc = ProjectContext.Instance.Container.InstantiateComponentOnNewGameObject<Accessory>();
-
-            acc.name = template.ContentId.ToString();
+            var contentName = template.ContentId.ToString();
+            var prefix = "weaponLang/{" + contentName + "}";
+            acc.name = contentName;
+            var nameLoc = LanguageData.AddTerm(prefix + "name");
+            nameLoc.SetTranslation(0, template.DisplayName);
+            var descLoc = LanguageData.AddTerm(prefix + "description");
+            descLoc.SetTranslation(0, template.Description);
+            var tipsLoc = LanguageData.AddTerm(prefix + "tips");
+            tipsLoc.SetTranslation(0, template.Tips);
 
             return acc;
         }
