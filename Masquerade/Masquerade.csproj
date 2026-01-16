@@ -45,7 +45,10 @@
 		<Compile Include="Api\Content.cs" />
 		<Compile Include="Api\Mod.cs" />
 		<Compile Include="Common.cs" />
+		<Compile Include="Equipment\EquipmentDefaults.cs" />
+		<Compile Include="Equipment\LevelingManager.cs" />
 		<Compile Include="Equipment\LevelUpInfo.cs" />
+		<Compile Include="Equipment\WeaponDataNames.cs" />
 		<Compile Include="Util\Il2CppDictionaryExtensions.cs" />
 		<Compile Include="Util\Il2CppEnumerableExtensions.cs" />
 		<Compile Include="Util\Il2CppListExtensions.cs" />
@@ -57,7 +60,7 @@
 		<Compile Include="Examples\ExampleAccessory.cs" />
 		<Compile Include="Equipment\CharacterStats.cs" />
 		<Compile Include="Equipment\EquipmentStats.cs" />
-		<Compile Include="Equipment\StatGrowthInfo.cs" />
+		<Compile Include="Equipment\WeaponDataInfo.cs" />
 		<Compile Include="Models\ContentFactory.cs" />
 		<Compile Include="Equipment\ShopTags.cs" />
 		<Compile Include="Equipment\WeaponStats.cs" />

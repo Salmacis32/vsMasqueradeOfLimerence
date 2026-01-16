@@ -1,5 +1,4 @@
 ﻿using Masquerade.Equipment;
-using Masquerade.Stats;
 
 namespace Masquerade
 {
@@ -7,9 +6,11 @@ namespace Masquerade
     {
         public ModAccessory() : base()
         {
-            AddFirstLevel("isPowerup", true);
+            AddLevelUp("isPowerup", true);
         }
 
-        public override int AppearenceRate => 90;
+        public override int AppearenceRate => EquipmentDefaults.AccessoryRarity;
+
+        public override int MaxLevel => EquipmentDefaults.MaxAccessoryLevel;
     }
 }

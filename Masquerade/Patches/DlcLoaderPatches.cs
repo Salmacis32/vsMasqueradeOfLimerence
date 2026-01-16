@@ -1,4 +1,5 @@
 ﻿using Harmony;
+using Il2Cpp;
 using Il2CppI2.Loc;
 using Il2CppVampireSurvivors.App.Data;
 using Il2CppVampireSurvivors.App.Tools;
@@ -70,10 +71,16 @@ namespace Masquerade.Patches
 
         private static void LoadSprites()
         {
-            var texture = TextureHelpers.LoadImageToTexture2d(Masquerade.AssemblyInstance, "Masquerade.Examples", "ExampleAccessory");
-            var sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-            sprite.name = "ExampleAccessory";
-            SpriteManager.RegisterSprite(sprite);
+            var manifest = Masquerade.AssemblyInstance.GetManifestResourceNames();
+            var rootPath = "Masquerade.Examples.";
+            foreach (var resource in manifest)
+            {
+                var name = (resource.Contains(rootPath)) ? resource.Substring(rootPath.Length) : resource;
+                var texture = TextureHelpers.LoadImageToTexture2d(Masquerade.AssemblyInstance, rootPath, name);
+                var sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                sprite.name = Path.GetFileNameWithoutExtension(name);
+                SpriteManager.RegisterSprite(sprite);
+            }
         }
 
         private static BundleManifestData CreateBundle()

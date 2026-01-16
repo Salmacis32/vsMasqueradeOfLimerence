@@ -26,6 +26,7 @@ namespace Masquerade
         public static Masquerade Instance { get; private set; }
         /// Dipswitches
         public static bool IgnoreWeaponsGlobal { get; private set; }
+        public static bool PreloadedDLC { get; private set; }
 
 
         public override void OnDeinitializeMelon()

@@ -1,12 +1,10 @@
 ﻿using Masquerade.Equipment;
 using Newtonsoft.Json.Linq;
-using System.Linq;
 
 namespace Masquerade.Systems
 {
     internal static class WeaponDataSystem
     {
-        private static readonly string[] BooleanDataNames = { WeaponStats.CanHitWalls, "isPowerup", "sealable", "isUnlocked", "seen" };
         internal static IDictionary<int, JArray> GenerateCustomWeaponData(IDictionary<MasqMod, IEnumerable<ModEquipment>> equipment)
         {
             var allWeaponData = new Dictionary<int, JArray>();
@@ -25,41 +23,39 @@ namespace Masquerade.Systems
         private static JToken SerializeEquipment(ModEquipment eq)
         {
             int levels = eq.MaxLevel;
-            Func<LevelUpInfo, IEnumerable<KeyValuePair<string, float>>> function = x => { return x.StatChanges; };
-
             JTokenWriter tokenWriter = new JTokenWriter();
             tokenWriter.WriteStartArray();
             for(int l = 1; l <= levels; l++)
             {
                 tokenWriter.WriteStartObject();
-                tokenWriter.WritePropertyName("level"); tokenWriter.WriteValue(l);
                 if (l == 1)
                 {
-                    tokenWriter.WritePropertyName("name"); tokenWriter.WriteValue(eq.DisplayName);
-                    tokenWriter.WritePropertyName("bulletType"); tokenWriter.WriteValue(eq.ContentId.ToString());
-                    // The following are all for testing only
-                    tokenWriter.WritePropertyName("contentGroup"); tokenWriter.WriteValue("EXTRA");
-                    tokenWriter.WritePropertyName("texture"); tokenWriter.WriteValue(eq.ContentName);
-                    tokenWriter.WritePropertyName("frameName"); tokenWriter.WriteValue(eq.TextureName);
+                    tokenWriter.WritePropertyName(WeaponDataNames.Level); tokenWriter.WriteValue(l);
+                    tokenWriter.WritePropertyName(WeaponDataNames.Name); tokenWriter.WriteValue(eq.DisplayName);
+                    tokenWriter.WritePropertyName(WeaponDataNames.ProjectileName); tokenWriter.WriteValue(eq.ContentId.ToString());
+                    tokenWriter.WritePropertyName(WeaponDataNames.TextureName); tokenWriter.WriteValue(eq.TextureName);
+                    tokenWriter.WritePropertyName(WeaponDataNames.SpriteName); tokenWriter.WriteValue(eq.TextureName);
+                    tokenWriter.WritePropertyName(WeaponDataNames.ContentGroup); tokenWriter.WriteValue("EXTRA");
                 }
-                var growth = eq.StatGrowth.Where(x => x.StartLevel == l || x.EndLevel == l || (l - x.StartLevel) % x.Interval == 0);
+                var growth = eq.LevelingManager.GetDataAtLevel(l);
                 foreach (var stat in growth)
                 {
-                    tokenWriter.WritePropertyName(stat.StatName);
-                    tokenWriter.WriteValue(stat.StatValue);
-                }
-                var levelUp = eq.LevelUpInfo.Where(x => x.Level == l);
-                foreach (var change in levelUp.SelectMany(function))
-                {
-                    tokenWriter.WritePropertyName(change.Key);
-                    tokenWriter.WriteValue((BooleanDataNames.Contains(change.Key)) ? CheckTrue(change.Value) : change.Value);
+                    if (!stat.HasAnyValues())
+                        continue;
+                    tokenWriter.WritePropertyName(stat.Name);
+                    if (stat.ValueBool.HasValue)
+                        tokenWriter.WriteValue(stat.ValueBool);
+                    else if (stat.ValueFloat.HasValue)
+                        tokenWriter.WriteValue(stat.ValueFloat);
+                    else if (stat.ValueInt.HasValue)
+                        tokenWriter.WriteValue(stat.ValueInt);
+                    else if (stat.ValueString != null)
+                        tokenWriter.WriteValue(stat.ValueString);
                 }
                 tokenWriter.WriteEndObject();
             }
             tokenWriter.WriteEndArray();
             return tokenWriter.Token;
         }
-
-        private static bool CheckTrue(float value) => value > 0;
     }
 }

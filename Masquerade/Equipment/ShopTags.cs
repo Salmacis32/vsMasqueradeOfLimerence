@@ -11,7 +11,7 @@
         HiddenEquipment = 2,
         SpecialShopsOnly = 4,
         StartsUnlocked = 8,
-        StartsSeenByPlayer = 16,
+        StartsSeen = 16,
         DoNotExcludeFromShop = 32,
         DropRateAffectedByLuck = 64,
         Unsealable = 128,

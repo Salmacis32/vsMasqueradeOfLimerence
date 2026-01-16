@@ -15,7 +15,8 @@ namespace Masquerade.Patches
         {
             var instructions = new List<PatchInstruction>();
             instructions.Add(new PatchInstruction(TargetClass, nameof(LoadingManager.LoadDlcs), typeof(LoadingManagerPatches).GetMethod(nameof(PreLoadDlcs))));
-            instructions.Add(new PatchInstruction(TargetClass, nameof(LoadingManager.MountDlc), typeof(LoadingManagerPatches).GetMethod(nameof(PreMountDlc))));
+            if (Masquerade.PreloadedDLC)
+                instructions.Add(new PatchInstruction(TargetClass, nameof(LoadingManager.MountDlc), typeof(LoadingManagerPatches).GetMethod(nameof(PreMountDlc))));
             return instructions;
         }
 
