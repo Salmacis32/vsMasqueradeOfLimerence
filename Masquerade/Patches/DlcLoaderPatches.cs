@@ -138,6 +138,13 @@ namespace Masquerade.Patches
         {
             var acc = ProjectContext.Instance.Container.InstantiateComponentOnNewGameObject<Accessory>();
             var contentName = template.ContentId.ToString();
+            SetLanguageData(template, acc, contentName);
+
+            return acc;
+        }
+
+        private static void SetLanguageData(ModAccessory template, Accessory acc, string contentName)
+        {
             var prefix = "weaponLang/{" + contentName + "}";
             acc.name = contentName;
             var nameLoc = LanguageData.AddTerm(prefix + "name");
@@ -146,8 +153,6 @@ namespace Masquerade.Patches
             descLoc.SetTranslation(0, template.Description);
             var tipsLoc = LanguageData.AddTerm(prefix + "tips");
             tipsLoc.SetTranslation(0, template.Tips);
-
-            return acc;
         }
     }
 }

@@ -47,7 +47,7 @@
 		<Compile Include="Common.cs" />
 		<Compile Include="Equipment\EquipmentDefaults.cs" />
 		<Compile Include="Equipment\LevelingManager.cs" />
-		<Compile Include="Equipment\LevelUpInfo.cs" />
+		<Compile Include="Equipment\LevelUpEvent.cs" />
 		<Compile Include="Equipment\WeaponDataNames.cs" />
 		<Compile Include="Util\Il2CppDictionaryExtensions.cs" />
 		<Compile Include="Util\Il2CppEnumerableExtensions.cs" />

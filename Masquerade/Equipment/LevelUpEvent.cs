@@ -1,7 +1,9 @@
 ﻿namespace Masquerade.Equipment
 {
-    public struct LevelUpInfo
+    public struct LevelUpEvent
     {
         public int Level { get; set; }
+
+        public string Description { get; set; }
     }
 }

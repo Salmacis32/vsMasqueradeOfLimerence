@@ -6,7 +6,7 @@ namespace Masquerade
     {
         public ModAccessory() : base()
         {
-            AddLevelUp("isPowerup", true);
+            AddLevelUp(WeaponDataNames.EquipmentIsAccessory, true);
         }
 
         public override int AppearenceRate => EquipmentDefaults.AccessoryRarity;
