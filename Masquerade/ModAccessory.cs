@@ -1,4 +1,6 @@
-﻿using Masquerade.Equipment;
+﻿using Il2CppVampireSurvivors.Objects;
+using Il2CppVampireSurvivors.Objects.Characters;
+using Masquerade.Equipment;
 
 namespace Masquerade
 {
@@ -12,5 +14,10 @@ namespace Masquerade
         public override int AppearenceRate => EquipmentDefaults.AccessoryRarity;
 
         public override int MaxLevel => EquipmentDefaults.MaxAccessoryLevel;
+
+        public virtual void OnAccessoryAdded(Accessory accessory) { }
+        public virtual void OnAccessoryRemoved(Accessory accessory) { }
+
+        public virtual void OnLevelUp(Accessory accessory) { }
     }
 }

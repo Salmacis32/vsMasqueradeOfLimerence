@@ -42,6 +42,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Include="Api\Api.cs" />
 		<Compile Include="Api\Content.cs" />
 		<Compile Include="Api\Mod.cs" />
 		<Compile Include="Common.cs" />
@@ -49,6 +50,12 @@
 		<Compile Include="Equipment\LevelingManager.cs" />
 		<Compile Include="Equipment\LevelUpEvent.cs" />
 		<Compile Include="Equipment\WeaponDataNames.cs" />
+		<Compile Include="ModCharacter.cs" />
+		<Compile Include="Models\CharacterReference.cs" />
+		<Compile Include="Models\EquipmentReference.cs" />
+		<Compile Include="Models\IInstanced.cs" />
+		<Compile Include="Models\ModInstanceComponent.cs" />
+		<Compile Include="Patches\AccessoriesFacadePatches.cs" />
 		<Compile Include="Util\Il2CppDictionaryExtensions.cs" />
 		<Compile Include="Util\Il2CppEnumerableExtensions.cs" />
 		<Compile Include="Util\Il2CppListExtensions.cs" />
@@ -98,6 +105,9 @@
 	  </Reference>
 	  <Reference Include="Il2CppDOTweenPro.Scripts">
 	    <HintPath>$(VSPath)\MelonLoader\Il2CppAssemblies\Il2CppDOTweenPro.Scripts.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Il2CppInterop.Common">
+	    <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\MelonLoader\net6\Il2CppInterop.Common.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Il2CppInterop.Runtime">
 	    <HintPath>$(VSPath)\MelonLoader\net6\Il2CppInterop.Runtime.dll</HintPath>

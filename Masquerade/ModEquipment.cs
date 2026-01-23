@@ -1,13 +1,21 @@
 ﻿using Masquerade.Equipment;
 using Masquerade.Stats;
+using Il2CppVampireSurvivors.Objects;
+using Masquerade.Models;
 
 namespace Masquerade
 {
-    public abstract class ModEquipment : ModContent
+    public abstract class ModEquipment : ModContent, IInstanced
     {
         public ModEquipment()
         {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             if (DisplayName is null) DisplayName = ContentName;
+            if (TextureName is null) TextureName = ContentName;
             LevelingManager = new LevelingManager();
             AddLevelUp(WeaponDataNames.ShopPrice, Price);
             AddLevelUp(WeaponDataNames.ShopRarity, AppearenceRate);
@@ -17,6 +25,7 @@ namespace Masquerade
             AddLevelUp(WeaponDataNames.StartsSeen, ShopTags.HasFlag(ShopTags.StartsSeen));
         }
 
+        public int InstanceId { get; internal set; } = -1;
         public virtual int AppearenceRate { get; protected set; }
         public virtual string Description { get; protected set; } = "Modded Item";
         public virtual string DisplayName { get; protected set; }
@@ -26,7 +35,7 @@ namespace Masquerade
         public virtual int MaxLevel { get; protected set; }
         public virtual int Price { get; protected set; } = EquipmentDefaults.Price;
         public virtual ShopTags ShopTags { get; protected set; }
-        public virtual string TextureName { get => ContentName; }
+        public virtual string TextureName { get; protected set; }
 
         public virtual string Tips { get; protected set; } = "";
 

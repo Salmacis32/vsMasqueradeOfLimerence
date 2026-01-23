@@ -139,6 +139,8 @@ namespace Masquerade.Patches
             var acc = ProjectContext.Instance.Container.InstantiateComponentOnNewGameObject<Accessory>();
             var contentName = template.ContentId.ToString();
             SetLanguageData(template, acc, contentName);
+            var component = acc.gameObject.AddComponent<ModInstanceComponent>();
+            component.ModInstanceId.Value = -1;
 
             return acc;
         }

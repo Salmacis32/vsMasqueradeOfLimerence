@@ -1,11 +1,17 @@
 ﻿using HarmonyLib;
+using Il2CppInterop.Common;
+using Il2CppInterop.Runtime;
+using Il2CppVampireSurvivors.Objects;
 using Masquerade;
 using Masquerade.Api;
 using Masquerade.Examples;
 using Masquerade.Models;
+using Masquerade.Patches;
 using Masquerade.Systems;
 using MelonLoader;
+using MelonLoader.NativeUtils;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 [assembly: MelonInfo(typeof(Masquerade.Masquerade), Common.VSML_TITLE, Common.BMD_VERSION, "Mercy", null)]
 [assembly: MelonGame("poncle", "Vampire Survivors")]
@@ -63,10 +69,6 @@ namespace Masquerade
 
             LoggerInstance.Msg($"Patchers initialized. Patched {Patchers?.Count()} class(es).");
 
-            var patched = PatchMethods();
-
-            LoggerInstance.Msg($"Methods patched. Patched {patched} methods.");
-
             LoggerInstance.Msg("Pre-initialization complete.");
         }
 
@@ -78,6 +80,10 @@ namespace Masquerade
             var contentTypes = PopulateAccessories();
 
             LoggerInstance.Msg($"Content factories populated. Populated {contentTypes} content type(s).");
+
+            var patched = PatchMethods();
+
+            LoggerInstance.Msg($"Methods patched. Patched {patched} methods.");
 
             MasqueradeInitialized = true;
 
@@ -116,12 +122,18 @@ namespace Masquerade
 
             foreach (var instruction in patches)
             {
-                var method = AccessTools.Method(instruction.ClassOrigin, instruction.MethodToPatch);
+                var method = (instruction.Parameters.Any()) ? AccessTools.DeclaredMethod(instruction.ClassOrigin, instruction.MethodToPatch, parameters: instruction.Parameters) : AccessTools.DeclaredMethod(instruction.ClassOrigin, instruction.MethodToPatch);
                 if (instruction.IsPrefix)
                     PatcherInstance.Patch(method, prefix: new HarmonyMethod(instruction.PatchMethod));
                 else
                     PatcherInstance.Patch(method, postfix: new HarmonyMethod(instruction.PatchMethod));
                 patched++;
+            }
+
+            var originalMethods = PatcherInstance.GetPatchedMethods();
+            foreach (var method in originalMethods) 
+            {
+                Logger.Msg($"{method.Name} {method.DeclaringType} {method.ReflectedType.Name}");
             }
 
             return patched;

@@ -33,5 +33,7 @@ namespace Masquerade.Models
         internal T GetContent(MasqMod Mod, string ContentName) => _content.SingleOrDefault(x => x.ContentName == ContentName && x.Mod == Mod);
 
         internal Y GetContent<Y>() where Y : T => _content.SingleOrDefault(x => x.GetType() == typeof(Y)) as Y;
+
+        internal bool DoesContentExist(int contentId) => _content.Any(x => x.ContentId == contentId);
     }
 }

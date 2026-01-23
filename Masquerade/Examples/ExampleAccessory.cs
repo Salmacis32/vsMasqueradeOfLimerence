@@ -1,4 +1,9 @@
-﻿using Masquerade.Stats;
+﻿using Il2CppVampireSurvivors.Data;
+using Il2CppVampireSurvivors.Framework;
+using Il2CppVampireSurvivors.Objects;
+using Il2CppVampireSurvivors.Objects.Characters;
+using Masquerade.Stats;
+using Masquerade.Util;
 
 namespace Masquerade.Examples
 {
@@ -20,5 +25,20 @@ namespace Masquerade.Examples
         /// Makes the item start seen by player so it appears in the collection for testing purposes
         /// </summary>
         public override ShopTags ShopTags => ShopTags.StartsSeen | ShopTags.StartsUnlocked;
+
+        public override void OnAccessoryAdded(Accessory accessory)
+        {
+            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Added");
+        }
+
+        public override void OnAccessoryRemoved(Accessory accessory)
+        {
+            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Removed");
+        }
+
+        public override void OnLevelUp(Accessory accessory)
+        {
+            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Leveled Up");
+        }
     }
 }

@@ -30,6 +30,7 @@
             _weaponData.Add(new WeaponDataInfo(level, datapoint, value));
         }
 
+        // Todo: Combine multiple instances of the same stat
         public void AddStatGrowth(int minLevel, int maxLevel, string stat, float value, int levelInterval = 1)
         {
             var levels = GrowthOperation(minLevel, maxLevel, levelInterval);
