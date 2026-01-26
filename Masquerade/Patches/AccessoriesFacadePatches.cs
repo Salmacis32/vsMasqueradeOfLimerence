@@ -69,7 +69,9 @@ namespace Masquerade.Patches
                     return;
                 }
                 if (accessoryByType.LevelUp(false))
-                    Masquerade.Api.GetOrAddAccessoryInstance((int)accessoryType, instComp.ModInstanceId).OnLevelUp(accessoryByType);
+                {
+                    Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, instComp.ModInstanceId.Value).OnLevelUp();
+                }
                 else
                     facade._playerOptions.AddCoins(10f, characterController);
 
@@ -78,6 +80,7 @@ namespace Masquerade.Patches
 
                 return;
             }
+
             Accessory accessoryPrefab = facade._accessoriesFactory.GetAccessoryPrefab(accessoryType);
             if (accessoryPrefab == null)
             {
@@ -93,7 +96,23 @@ namespace Masquerade.Patches
             Accessory component = UnityEngine.Object.Instantiate(accessoryPrefab, transform.position, Quaternion.identity, transform).GetComponent<Accessory>();
             component.Init(characterController, accessoryType);
             characterController.AccessoriesManager.AddEquipment(component);
-            Masquerade.Api.GetOrAddAccessoryInstance((int)accessoryType, instanceComponent.ModInstanceId).OnAccessoryAdded(component);
+
+            if (!characterController.gameObject.TryGetComponent<GlobalInstanceComponent>(out var charComponent))
+            {
+                Masquerade.Logger.Warning($"Accessory {(int)accessoryType} has no GlobalInstanceComponent!");
+                characterController.gameObject.AddComponent<GlobalInstanceComponent>();
+            }
+            var container = Masquerade.Api.GetOrAddCharacterInstance(charComponent.GlobalInstanceId.Value, characterController);
+            if (container == null)
+            {
+                Masquerade.Logger.Error("Character container failed to load!");
+                return;
+            }
+
+            var instance = Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, instanceComponent.ModInstanceId.Value);
+            container.AddEquipmentModId(instance.InstanceId);
+            instance.OnAccessoryAdded(container);
+
             facade._signalBus.Fire(new GameplaySignals.AccessoryAddedToCharacterSignal
             {
                 Character = characterController,
@@ -135,10 +154,29 @@ namespace Masquerade.Patches
                 characterController.AccessoriesManager.RemoveEquipment(accessoryByType);
             }
             accessoryByType.OnAccessoryRemovedFromEquipment();
+
+            if (accessoryByType.gameObject.TryGetComponent<ModInstanceComponent>(out var instanceComponent))
+            {
+                if (!characterController.gameObject.TryGetComponent<GlobalInstanceComponent>(out var charComponent))
+                {
+                    Masquerade.Logger.Warning($"Accessory {(int)accessoryType} has no GlobalInstanceComponent!");
+                    characterController.gameObject.AddComponent<GlobalInstanceComponent>();
+                }
+                var container = Masquerade.Api.GetOrAddCharacterInstance(charComponent.GlobalInstanceId.Value, characterController);
+                if (container == null)
+                {
+                    Masquerade.Logger.Error("Character container failed to load!");
+                    return;
+                }
+                Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, instanceComponent.ModInstanceId.Value).OnAccessoryRemoved(container);
+                container.RemoveEquipmentModId(instanceComponent.ModInstanceId.Value);
+                Masquerade.Api.DeleteEquipmentInstance(instanceComponent.ModInstanceId.Value);
+            }
+
             accessoryByType.Cleanup();
             if (notifyRemove)
             {
-                facade._signalBus.Fire<GameplaySignals.AccessoryRemovedFromCharacterSignal>(new GameplaySignals.AccessoryRemovedFromCharacterSignal
+                facade._signalBus.Fire(new GameplaySignals.AccessoryRemovedFromCharacterSignal
                 {
                     Character = characterController,
                     Accessory = accessoryType

@@ -2,7 +2,7 @@
 
 namespace Masquerade
 {
-    public class ModCharacter : IInstanced
+    public abstract class ModCharacterEffects : IInstanced
     {
         public int InstanceId { get; internal set; } = -1;
     }

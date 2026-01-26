@@ -17,8 +17,8 @@ namespace Masquerade.Examples
 
         public ExampleAccessory() : base()
         {
-            LevelingManager.AddStatGrowth(minLevel: 1, maxLevel: 5, CharacterStats.MaxHp, value: 0.2f, levelInterval: 2);
-            LevelingManager.AddStatGrowth(minLevel: 2, maxLevel: 5, CharacterStats.MoveSpeed, value: 0.2f, levelInterval: 2);
+            LevelingManager.AddStatGrowth(minLevel: 1, maxLevel: 5, CharacterStatNames.MaxHp, value: 0.2f, levelInterval: 2);
+            LevelingManager.AddStatGrowth(minLevel: 2, maxLevel: 5, CharacterStatNames.MoveSpeed, value: 0.2f, levelInterval: 2);
         }
 
         /// <summary>
@@ -26,17 +26,17 @@ namespace Masquerade.Examples
         /// </summary>
         public override ShopTags ShopTags => ShopTags.StartsSeen | ShopTags.StartsUnlocked;
 
-        public override void OnAccessoryAdded(Accessory accessory)
+        public override void OnAccessoryAdded(CharacterContainer character)
         {
-            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Added");
+            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Added to character {character.Name} level {character.Level}");
         }
 
-        public override void OnAccessoryRemoved(Accessory accessory)
+        public override void OnAccessoryRemoved(CharacterContainer character)
         {
-            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Removed");
+            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Removed from character {character.Name} level {character.Level}");
         }
 
-        public override void OnLevelUp(Accessory accessory)
+        public override void OnLevelUp()
         {
             Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Leveled Up");
         }

@@ -1,6 +1,6 @@
 ﻿namespace Masquerade
 {
-    public static class CharacterStats
+    public static class CharacterStatNames
     {
         public const string Cooldown = "cooldown";
         public const string MaxHp = "maxHp";

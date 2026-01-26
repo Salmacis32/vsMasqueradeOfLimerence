@@ -13,7 +13,7 @@ namespace Masquerade.Models
         }
         internal CharacterController Instance { get; set; }
         */
-        internal ModCharacter ModInstance { get; set; }
+        internal ModCharacterEffects ModInstance { get; set; }
         internal IDictionary<int, EquipmentReference> Equipment { get; set; } = new Dictionary<int, EquipmentReference>();
     }
 }
