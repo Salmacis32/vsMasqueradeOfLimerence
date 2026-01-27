@@ -164,14 +164,10 @@ namespace Masquerade.Patches
         private static void MusicAdder(BundleManifestData manifestData)
         {
             TextAsset textAsset = new TextAsset(Masquerade.MusicJson);
-            //TextAsset albumAsset = new TextAsset(vsMLCore.AlbumJson);
-            //var bytes = File.ReadAllBytes("F:\\SteamLibrary\\steamapps\\common\\Vampire Survivors\\UserData\\CustomAudio\\PacmanCE\\pacalbum.png");
-            //var album = new Texture2D(256, 256);
-            //ImageConversion.LoadImage(album, bytes);
-            //var handle = Addressables.LoadAssetAsync<Texture2D>(album);
+            TextAsset albumAsset = new TextAsset(Masquerade.AlbumJson);
             manifestData.DataFiles._MusicDataJsonAsset = textAsset;
             manifestData._DynamicSoundGroup = DynamicSoundGroupFactory.DefaultModdedGroup();
-            //manifestData.DataFiles._AlbumDataJsonAsset = albumAsset;
+            manifestData.DataFiles._AlbumDataJsonAsset = albumAsset;
             manifestData._AssetReferenceLibrary = new AssetReferenceLibrary();
             manifestData._AssetReferenceLibrary._AssetRefs = new AssetReferenceLibrary.AssetRefsDictionary();
         }

@@ -1,0 +1,14 @@
+{
+  "100": {
+    "isUnlocked": true,
+    "title": "Modded Music",
+    "icon": "ExampleAlbum.png",
+    "contentGroupType": "EXTRA",
+    "trackList": [
+      "1410",
+      "1411",
+      "1412",
+      "1413"
+    ]
+  }
+}

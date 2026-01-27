@@ -18,7 +18,9 @@ namespace Masquerade
     {
         private const string CUSTOM_AUDIO_FILE_PATH = "\\CustomAudio\\";
         private const string MUSIC_DATA_RESOURCE_FILE = "Masquerade.Data.musicData_Modded.json";
+        private const string ALBUM_DATA_RESOURCE_FILE = "Masquerade.Data.albumData_Modded.json";
         public static string MusicJson;
+        public static string AlbumJson;
         public const int MUSIC_START_ID = 1410;
         public static IDictionary<int, SongData[]> CustomMusic;
         /// <summary>
@@ -150,19 +152,20 @@ namespace Masquerade
         private static void LoadMusic(System.Reflection.Assembly ass)
         {
             var mdmj = ass.GetManifestResourceStream(MUSIC_DATA_RESOURCE_FILE);
-            //var albmj = ass.GetManifestResourceStream(ALBUM_DATA_RESOURCE_FILE);
+            var albmj = ass.GetManifestResourceStream(ALBUM_DATA_RESOURCE_FILE);
             var read2 = new StreamReader(mdmj);
             MusicJson = read2.ReadToEnd();
-            //read2 = new StreamReader(albmj);
-            //AlbumJson = read2.ReadToEnd();
+            read2 = new StreamReader(albmj);
+            AlbumJson = read2.ReadToEnd();
             CustomMusic = new Dictionary<int, SongData[]>();
             int id = MUSIC_START_ID;
 
             //AddSong(id, "PacmanCE", "PAC TRONICA", ["BGM_Pactronica1.wav", "BGM_Pactronica2.wav"]); id++;
-            //AddSong(id, "PacmanCE", "PAC MADNESS", ["BGM_Pacmadness1.wav", "BGM_Pacmadness2.wav"]); id++;
-            //AddSong(id, "PacmanCE", "PAC TOY BOX", ["BGM_Pactoybox1.wav", "BGM_Pactoybox2.wav"]); id++;
-            //AddSong(id, "PacmanCE", "PAC BABY", ["BGM_Pacbaby1.wav", "BGM_Pacbaby2.wav"]); id++;
-            AddSong(id, "Mob Smash", "Smash", ["BGM_MobSmash1.wav", "BGM_MobSmash2.wav"]);
+            AddSong(id, "Mob Smash", "Smash", ["BGM_MobSmash1.wav", "BGM_MobSmash2.wav"]); id++;
+            AddSong(id, "PAC MADNESS", "PacmanCE", ["BGM_Pacmadness1.wav", "BGM_Pacmadness2.wav"]); id++;
+            AddSong(id, "PAC TOY BOX", "PacmanCE", ["BGM_Pactoybox1.wav", "BGM_Pactoybox2.wav"]); id++;
+            AddSong(id, "PAC BABY", "PacmanCE", ["BGM_Pacbaby1.wav", "BGM_Pacbaby2.wav"]);
+            
         }
 
         private static void AddSong(int id, string name, string album, string[] paths)

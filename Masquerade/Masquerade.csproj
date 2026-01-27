@@ -39,6 +39,7 @@
 
 	<ItemGroup>
 	  <None Remove="Examples\ExampleAccessory.png" />
+	  <None Remove="Examples\ExampleAlbum.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -221,6 +222,11 @@
 	  <Reference Include="UnityEngine.ImageConversionModule">
 	    <HintPath>$(VSPath)\MelonLoader\Il2CppAssemblies\UnityEngine.ImageConversionModule.dll</HintPath>
 	  </Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Data\albumData_Modded.json" />
+	  <EmbeddedResource Include="Examples\ExampleAlbum.png" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
