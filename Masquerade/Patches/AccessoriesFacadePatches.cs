@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Il2CppVampireSurvivors.App.Tools;
 using Il2CppVampireSurvivors.Data;
 using Il2CppVampireSurvivors.Framework;
 using Il2CppVampireSurvivors.Objects;
@@ -61,16 +62,18 @@ namespace Masquerade.Patches
         private static void AddAccessory(AccessoriesFacade facade, WeaponType accessoryType, CharacterController characterController, bool removeFromStore = true)
         {
             Accessory accessoryByType = characterController.AccessoriesManager.GetAccessoryByType(accessoryType, false);
-            if (accessoryByType != null && !accessoryByType.CurrentAccessoryData.allowDuplicates)
+            if (accessoryByType != null)
             {
-                if (!accessoryByType.gameObject.TryGetComponent<ModInstanceComponent>(out var instComp))
-                {
-                    Masquerade.Logger.Error($"Accessory {(int)accessoryType} has no ModInstanceComponent!");
-                    return;
-                }
                 if (accessoryByType.LevelUp(false))
                 {
-                    Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, instComp.ModInstanceId.Value).OnLevelUp();
+                    var cc = characterController.gameObject.GetOrAddComponent<GlobalInstanceComponent>();
+                    var cont = Masquerade.Api.GetOrAddCharacterInstance(characterController, cc);
+                    if (cont == null)
+                    {
+                        Masquerade.Logger.Error("Character container failed to load!");
+                        return;
+                    }
+                    Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, cont).OnLevelUp();
                 }
                 else
                     facade._playerOptions.AddCoins(10f, characterController);
@@ -87,30 +90,22 @@ namespace Masquerade.Patches
                 Masquerade.Logger.Error(string.Format("Accessory prefab is NULL for type {0}. Likely not generated a prefab for this yet...", accessoryType));
                 return;
             }
-            if (!accessoryPrefab.gameObject.TryGetComponent<ModInstanceComponent>(out var instanceComponent))
-            {
-                Masquerade.Logger.Error($"Accessory {(int)accessoryType} has no ModInstanceComponent!");
-                return;
-            }
+
             Transform transform = characterController.transform;
             Accessory component = UnityEngine.Object.Instantiate(accessoryPrefab, transform.position, Quaternion.identity, transform).GetComponent<Accessory>();
             component.Init(characterController, accessoryType);
             characterController.AccessoriesManager.AddEquipment(component);
 
-            if (!characterController.gameObject.TryGetComponent<GlobalInstanceComponent>(out var charComponent))
-            {
-                Masquerade.Logger.Warning($"Accessory {(int)accessoryType} has no GlobalInstanceComponent!");
-                characterController.gameObject.AddComponent<GlobalInstanceComponent>();
-            }
-            var container = Masquerade.Api.GetOrAddCharacterInstance(charComponent.GlobalInstanceId.Value, characterController);
+            var charComponent = characterController.gameObject.GetOrAddComponent<GlobalInstanceComponent>();
+            var container = Masquerade.Api.GetOrAddCharacterInstance(characterController, charComponent);
             if (container == null)
             {
                 Masquerade.Logger.Error("Character container failed to load!");
                 return;
             }
 
-            var instance = Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, instanceComponent.ModInstanceId.Value);
-            container.AddEquipmentModId(instance.InstanceId);
+            var instance = Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container);
+            
             instance.OnAccessoryAdded(container);
 
             facade._signalBus.Fire(new GameplaySignals.AccessoryAddedToCharacterSignal
@@ -155,23 +150,19 @@ namespace Masquerade.Patches
             }
             accessoryByType.OnAccessoryRemovedFromEquipment();
 
-            if (accessoryByType.gameObject.TryGetComponent<ModInstanceComponent>(out var instanceComponent))
+            if (!characterController.gameObject.TryGetComponent<GlobalInstanceComponent>(out var charComponent))
             {
-                if (!characterController.gameObject.TryGetComponent<GlobalInstanceComponent>(out var charComponent))
-                {
-                    Masquerade.Logger.Warning($"Accessory {(int)accessoryType} has no GlobalInstanceComponent!");
-                    characterController.gameObject.AddComponent<GlobalInstanceComponent>();
-                }
-                var container = Masquerade.Api.GetOrAddCharacterInstance(charComponent.GlobalInstanceId.Value, characterController);
-                if (container == null)
-                {
-                    Masquerade.Logger.Error("Character container failed to load!");
-                    return;
-                }
-                Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, instanceComponent.ModInstanceId.Value).OnAccessoryRemoved(container);
-                container.RemoveEquipmentModId(instanceComponent.ModInstanceId.Value);
-                Masquerade.Api.DeleteEquipmentInstance(instanceComponent.ModInstanceId.Value);
+                Masquerade.Logger.Warning($"Accessory {(int)accessoryType} has no GlobalInstanceComponent!");
+                characterController.gameObject.AddComponent<GlobalInstanceComponent>();
             }
+            var container = Masquerade.Api.GetOrAddCharacterInstance(characterController, charComponent);
+            if (container == null)
+            {
+                Masquerade.Logger.Error("Character container failed to load!");
+                return;
+            }
+            Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container).OnAccessoryRemoved(container);
+            Masquerade.Api.DeleteEquipmentInstance((int)accessoryType, container);
 
             accessoryByType.Cleanup();
             if (notifyRemove)

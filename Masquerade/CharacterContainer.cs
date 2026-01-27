@@ -7,11 +7,12 @@ namespace Masquerade
     {
         public CharacterContainer() 
         {
-            _equipmentGlobalIds = new HashSet<int>();
-            _equipmentModIds = new HashSet<int>();
+            _equipmentIds = new HashSet<int>();
+            _modEquipment = new HashSet<ModEquipment>();
+            _modEffects = new HashSet<ModCharacterEffects>();
         }
 
-        public int InstanceId { get; internal set; }
+        public int InstanceId { get; internal set; } = -1;
 
         public string Name { get; internal set; }
 
@@ -23,26 +24,52 @@ namespace Masquerade
 
         public float CurrentHP { get; internal set; }
 
-        private Lazy<HashSet<ModEquipment>> _modEquipment;
-        private Lazy<HashSet<ModCharacterEffects>> _modEffects;
+        private HashSet<ModEquipment> _modEquipment;
+        private HashSet<ModCharacterEffects> _modEffects;
 
-        private HashSet<int> _equipmentGlobalIds;
-        private HashSet<int> _equipmentModIds;
+        private HashSet<int> _equipmentIds;
 
-        internal void AddEquipmentModId(int instanceId)
+        internal void AddEquipmentId(int contentId)
         {
-            if (InstanceId < 0 || _equipmentModIds.Any(x => x == instanceId))
+            if (InstanceId < 0 || HasEquipmentId(contentId))
                 return;
 
-            _equipmentModIds.Add(instanceId);
+            _equipmentIds.Add(contentId);
         }
 
-        internal void RemoveEquipmentModId(int instanceId)
+        internal void RemoveEquipmentId(int contentId)
         {
-            if (InstanceId < 0 || !_equipmentModIds.Any(x => x == instanceId))
+            if (InstanceId < 0 || !HasEquipmentId(contentId))
                 return;
 
-            _equipmentModIds.Remove(instanceId);
+            _equipmentIds.Remove(contentId);
         }
+
+        public bool HasEquipment(int contentId) => _equipmentIds.Contains(contentId) && _modEquipment.Any(x => x.ContentId == contentId);
+        public bool HasAccessory<T>() where T : ModAccessory
+        {
+            var contentId = Masquerade.Api.GetModAccessory<T>().ContentId;
+            return _equipmentIds.Contains(contentId) && _modEquipment.Any(x => x.ContentId == contentId);
+        }
+        private bool HasEquipmentId(int contentId) => _equipmentIds.Contains(contentId);
+
+        internal void AddModEquipment(ModEquipment equip)
+        {
+            if (!_equipmentIds.Contains(equip.ContentId))
+                return;
+
+            _modEquipment.Add(equip);
+        }
+
+        internal void RemoveModEquipment(int contentId)
+        {
+            if (!_equipmentIds.Contains(contentId))
+                return;
+
+            _modEquipment.Remove(GetEquipment(contentId));
+            _equipmentIds.Remove(contentId);
+        }
+
+        public ModEquipment GetEquipment(int contentId) => _modEquipment.Single(x => x.ContentId == contentId);
     }
 }

@@ -1,12 +1,15 @@
-﻿using Il2CppInterop.Runtime.InteropTypes.Fields;
-using MelonLoader;
+﻿using MelonLoader;
 using UnityEngine;
 
 namespace Masquerade.Models
 {
     [RegisterTypeInIl2Cpp]
-    public class ModInstanceComponent(IntPtr ptr) : MonoBehaviour(ptr)
+    public class ModInstanceComponent : MonoBehaviour
     {
-        public Il2CppValueField<int> ModInstanceId;
+        public ModInstanceComponent(IntPtr ptr) : base(ptr)
+        {
+        }
+
+        public int ModInstanceId = -1;
     }
 }

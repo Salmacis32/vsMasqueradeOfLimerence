@@ -20,7 +20,6 @@ namespace Masquerade.Patches
             foreach (var character in __instance._characters)
             {
                 var component = character.gameObject.AddComponent<GlobalInstanceComponent>();
-                component.GlobalInstanceId.Value = -1;
             }
         }
 

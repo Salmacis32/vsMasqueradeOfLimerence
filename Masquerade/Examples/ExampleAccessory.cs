@@ -1,9 +1,4 @@
-﻿using Il2CppVampireSurvivors.Data;
-using Il2CppVampireSurvivors.Framework;
-using Il2CppVampireSurvivors.Objects;
-using Il2CppVampireSurvivors.Objects.Characters;
-using Masquerade.Stats;
-using Masquerade.Util;
+﻿using Masquerade.Stats;
 
 namespace Masquerade.Examples
 {
@@ -38,7 +33,7 @@ namespace Masquerade.Examples
 
         public override void OnLevelUp()
         {
-            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Leveled Up");
+            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Leveled Up on character {Owner.Name}");
         }
     }
 }

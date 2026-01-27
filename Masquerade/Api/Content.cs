@@ -29,6 +29,23 @@ namespace Masquerade.Api
             return AccessoryFactory.GetContent<T>();
         }
 
+        public CharacterContainer GetEquipmentOwner(ModEquipment modEquipment)
+        {
+            if (modEquipment == null || modEquipment.ContentId < 0)
+            {
+                Masquerade.Logger.Warning($"ModEquipment {modEquipment.FullName} has no instance id attached!");
+                return null;
+            }
+            var character = _characters.SingleOrDefault(x => x.HasEquipment(modEquipment.ContentId));
+            if (character == null)
+            {
+                Masquerade.Logger.Warning($"No character owns ModEquipment {modEquipment.FullName}");
+                return null;
+            }
+
+            return character;
+        }
+
         public bool DoesModExist(MasqMod mod) => LoadedMods.Any(x => x == mod);
         public bool DoesModExist(string name) => LoadedMods.Any(x => x.Name.Equals(name));
         public bool IsTypeModdedContent(int typeId)

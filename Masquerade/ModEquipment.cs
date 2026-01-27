@@ -5,7 +5,7 @@ using Masquerade.Models;
 
 namespace Masquerade
 {
-    public abstract class ModEquipment : ModContent, IInstanced
+    public abstract class ModEquipment : ModContent
     {
         public ModEquipment()
         {
@@ -25,7 +25,6 @@ namespace Masquerade
             AddLevelUp(WeaponDataNames.StartsSeen, ShopTags.HasFlag(ShopTags.StartsSeen));
         }
 
-        public int InstanceId { get; internal set; } = -1;
         public virtual int AppearenceRate { get; protected set; }
         public virtual string Description { get; protected set; } = "Modded Item";
         public virtual string DisplayName { get; protected set; }
@@ -38,6 +37,8 @@ namespace Masquerade
         public virtual string TextureName { get; protected set; }
 
         public virtual string Tips { get; protected set; } = "";
+
+        public CharacterContainer Owner { get; set; }
 
         public void AddLevelUp(string stat, float value, int atLevel = 1)
         {

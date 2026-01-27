@@ -1,25 +1,26 @@
-﻿using HarmonyLib;
-using Il2CppInterop.Common;
-using Il2CppInterop.Runtime;
-using Il2CppVampireSurvivors.Objects;
+﻿using AudioImportLib;
+using HarmonyLib;
 using Masquerade;
 using Masquerade.Api;
 using Masquerade.Examples;
 using Masquerade.Models;
-using Masquerade.Patches;
-using Masquerade.Systems;
 using MelonLoader;
-using MelonLoader.NativeUtils;
+using MelonLoader.Utils;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 [assembly: MelonInfo(typeof(Masquerade.Masquerade), Common.VSML_TITLE, Common.BMD_VERSION, "Mercy", null)]
 [assembly: MelonGame("poncle", "Vampire Survivors")]
+[assembly: MelonAdditionalDependencies("AudioImportLib")]
 
 namespace Masquerade
 {
     public class Masquerade : MasqMod
     {
+        private const string CUSTOM_AUDIO_FILE_PATH = "\\CustomAudio\\";
+        private const string MUSIC_DATA_RESOURCE_FILE = "Masquerade.Data.musicData_Modded.json";
+        public static string MusicJson;
+        public const int MUSIC_START_ID = 1410;
+        public static IDictionary<int, SongData[]> CustomMusic;
         /// <summary>
         /// Harmony assembly
         /// </summary>
@@ -33,6 +34,7 @@ namespace Masquerade
         /// Dipswitches
         public static bool IgnoreWeaponsGlobal { get; private set; }
         public static bool PreloadedDLC { get; private set; }
+        public static readonly bool ShouldLoadMusic = true;
 
 
         public override void OnDeinitializeMelon()
@@ -84,6 +86,12 @@ namespace Masquerade
             var patched = PatchMethods();
 
             LoggerInstance.Msg($"Methods patched. Patched {patched} methods.");
+
+            LoggerInstance.Msg($"Loading music...");
+
+            LoadMusic(AssemblyInstance);
+
+            LoggerInstance.Msg($"Music loaded.");
 
             MasqueradeInitialized = true;
 
@@ -137,6 +145,34 @@ namespace Masquerade
             }
 
             return patched;
+        }
+
+        private static void LoadMusic(System.Reflection.Assembly ass)
+        {
+            var mdmj = ass.GetManifestResourceStream(MUSIC_DATA_RESOURCE_FILE);
+            //var albmj = ass.GetManifestResourceStream(ALBUM_DATA_RESOURCE_FILE);
+            var read2 = new StreamReader(mdmj);
+            MusicJson = read2.ReadToEnd();
+            //read2 = new StreamReader(albmj);
+            //AlbumJson = read2.ReadToEnd();
+            CustomMusic = new Dictionary<int, SongData[]>();
+            int id = MUSIC_START_ID;
+
+            //AddSong(id, "PacmanCE", "PAC TRONICA", ["BGM_Pactronica1.wav", "BGM_Pactronica2.wav"]); id++;
+            //AddSong(id, "PacmanCE", "PAC MADNESS", ["BGM_Pacmadness1.wav", "BGM_Pacmadness2.wav"]); id++;
+            //AddSong(id, "PacmanCE", "PAC TOY BOX", ["BGM_Pactoybox1.wav", "BGM_Pactoybox2.wav"]); id++;
+            //AddSong(id, "PacmanCE", "PAC BABY", ["BGM_Pacbaby1.wav", "BGM_Pacbaby2.wav"]); id++;
+            AddSong(id, "Mob Smash", "Smash", ["BGM_MobSmash1.wav", "BGM_MobSmash2.wav"]);
+        }
+
+        private static void AddSong(int id, string name, string album, string[] paths)
+        {
+            var clips = new SongData[paths.Length];
+            for (var i = 0; i < paths.Length; i++)
+            {
+                clips[i] = new SongData(API.LoadAudioClip(MelonEnvironment.UserDataDirectory + CUSTOM_AUDIO_FILE_PATH + album + "\\" + paths[i], true), name + i, album, (i != 0));
+            }
+            CustomMusic.Add(id, clips);
         }
     }
 }

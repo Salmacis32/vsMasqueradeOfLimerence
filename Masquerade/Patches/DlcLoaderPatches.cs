@@ -75,6 +75,8 @@ namespace Masquerade.Patches
             var rootPath = "Masquerade.Examples.";
             foreach (var resource in manifest)
             {
+                if (!Path.GetExtension(resource).Contains("png"))
+                    continue;
                 var name = (resource.Contains(rootPath)) ? resource.Substring(rootPath.Length) : resource;
                 var texture = TextureHelpers.LoadImageToTexture2d(Masquerade.AssemblyInstance, rootPath, name);
                 var sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
@@ -92,6 +94,10 @@ namespace Masquerade.Patches
             {
                 LanguageData = LocalizationManager.Sources._items.First();
                 modDlcData._AccessoriesFactory = PopulateAccessories();
+            }
+            if (Masquerade.ShouldLoadMusic)
+            {
+                MusicAdder(modDlcData);
             }
             return modDlcData;
         }
@@ -139,8 +145,6 @@ namespace Masquerade.Patches
             var acc = ProjectContext.Instance.Container.InstantiateComponentOnNewGameObject<Accessory>();
             var contentName = template.ContentId.ToString();
             SetLanguageData(template, acc, contentName);
-            var component = acc.gameObject.AddComponent<ModInstanceComponent>();
-            component.ModInstanceId.Value = -1;
 
             return acc;
         }
@@ -155,6 +159,21 @@ namespace Masquerade.Patches
             descLoc.SetTranslation(0, template.Description);
             var tipsLoc = LanguageData.AddTerm(prefix + "tips");
             tipsLoc.SetTranslation(0, template.Tips);
+        }
+
+        private static void MusicAdder(BundleManifestData manifestData)
+        {
+            TextAsset textAsset = new TextAsset(Masquerade.MusicJson);
+            //TextAsset albumAsset = new TextAsset(vsMLCore.AlbumJson);
+            //var bytes = File.ReadAllBytes("F:\\SteamLibrary\\steamapps\\common\\Vampire Survivors\\UserData\\CustomAudio\\PacmanCE\\pacalbum.png");
+            //var album = new Texture2D(256, 256);
+            //ImageConversion.LoadImage(album, bytes);
+            //var handle = Addressables.LoadAssetAsync<Texture2D>(album);
+            manifestData.DataFiles._MusicDataJsonAsset = textAsset;
+            manifestData._DynamicSoundGroup = DynamicSoundGroupFactory.DefaultModdedGroup();
+            //manifestData.DataFiles._AlbumDataJsonAsset = albumAsset;
+            manifestData._AssetReferenceLibrary = new AssetReferenceLibrary();
+            manifestData._AssetReferenceLibrary._AssetRefs = new AssetReferenceLibrary.AssetRefsDictionary();
         }
     }
 }
