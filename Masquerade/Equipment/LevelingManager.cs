@@ -2,7 +2,7 @@
 {
     public class LevelingManager
     {
-        private static readonly string[] _booleanDataNames = { WeaponStats.CanHitWalls, WeaponDataNames.EquipmentIsAccessory, WeaponDataNames.Sealable, WeaponDataNames.StartsUnlocked, WeaponDataNames.StartsSeen };
+        private static readonly string[] _booleanDataNames = { WeaponStatNames.CanHitWalls, WeaponDataNames.EquipmentIsAccessory, WeaponDataNames.Sealable, WeaponDataNames.StartsUnlocked, WeaponDataNames.StartsSeen };
         private HashSet<WeaponDataInfo> _weaponData;
 
         public LevelingManager()

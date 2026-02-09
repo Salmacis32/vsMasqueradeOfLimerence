@@ -1,9 +1,9 @@
-﻿namespace Masquerade
+﻿namespace Masquerade.Equipment
 {
     /// <summary>
     /// The default stats for weapons.
     /// </summary>
-    public static class WeaponStats
+    public static class WeaponStatNames
     {
         /// <summary>
         /// The chance of the weapon causing a critical hit.
@@ -24,7 +24,7 @@
         /// <remarks>
         /// Default: 2.0f
         /// </remarks>
-        public const string CritDamage = "critMul";
+        public const string CritMultiplier = "critMul";
         /// <summary>
         /// The knockback factor of the weapon.
         /// </summary>

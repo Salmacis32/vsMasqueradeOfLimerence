@@ -1,4 +1,5 @@
-﻿using Masquerade.Stats;
+﻿using Masquerade.Character;
+using Masquerade.Stats;
 
 namespace Masquerade.Examples
 {
@@ -9,6 +10,8 @@ namespace Masquerade.Examples
         public override string Description => "Grants movespeed and max hp.";
 
         public override string Tips => "This is an example!";
+
+        public override int AppearenceRate => 5000;
 
         public ExampleAccessory() : base()
         {

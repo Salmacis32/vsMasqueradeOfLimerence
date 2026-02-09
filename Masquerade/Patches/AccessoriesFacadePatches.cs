@@ -73,7 +73,7 @@ namespace Masquerade.Patches
                         Masquerade.Logger.Error("Character container failed to load!");
                         return;
                     }
-                    Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, cont).OnLevelUp();
+                    Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, cont, characterController).OnLevelUp();
                 }
                 else
                     facade._playerOptions.AddCoins(10f, characterController);
@@ -104,7 +104,7 @@ namespace Masquerade.Patches
                 return;
             }
 
-            var instance = Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container);
+            var instance = Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container, characterController);
             
             instance.OnAccessoryAdded(container);
 
@@ -161,7 +161,7 @@ namespace Masquerade.Patches
                 Masquerade.Logger.Error("Character container failed to load!");
                 return;
             }
-            Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container).OnAccessoryRemoved(container);
+            Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container, characterController).OnAccessoryRemoved(container);
             Masquerade.Api.DeleteEquipmentInstance((int)accessoryType, container);
 
             accessoryByType.Cleanup();

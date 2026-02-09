@@ -10,9 +10,9 @@
         public float Luck;
         public float Armor;
         public float HpRegen;
-        public int Revivals;
-        public int Rerolls;
-        public int Skips;
+        public float Revivals;
+        public float Rerolls;
+        public float Skips;
         public float Curse;
         public float Greed;
     }

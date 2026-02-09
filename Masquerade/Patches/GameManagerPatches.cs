@@ -17,10 +17,7 @@ namespace Masquerade.Patches
 
         public static void PostInitializeGameSession(GameManager __instance)
         {
-            foreach (var character in __instance._characters)
-            {
-                var component = character.gameObject.AddComponent<GlobalInstanceComponent>();
-            }
+            
         }
 
         public static void PostResetGameSession(GameManager __instance)

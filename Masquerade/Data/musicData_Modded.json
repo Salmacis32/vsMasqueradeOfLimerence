@@ -7,7 +7,7 @@
     "unlockedByCharacter": null,
     "unlockedByItem": null,
     "isUnlocked": true,
-    "icon": "stage_moonspell_icon.png",
+    "icon": "stage_green_unlock.png",
     "hyperMod": {
       "rate": 1.0625,
       "detune": 0
@@ -25,7 +25,7 @@
     "unlockedByCharacter": null,
     "unlockedByItem": null,
     "isUnlocked": true,
-    "icon": "stage_moonspell_icon.png",
+    "icon": "stage_spazie_icon.png",
     "hyperMod": {
       "rate": 1.0625,
       "detune": 0
@@ -43,7 +43,7 @@
     "unlockedByCharacter": null,
     "unlockedByItem": null,
     "isUnlocked": true,
-    "icon": "stage_moonspell_icon.png",
+    "icon": "stage_spazie_icon.png",
     "hyperMod": {
       "rate": 1.0625,
       "detune": 0
@@ -61,7 +61,7 @@
     "unlockedByCharacter": null,
     "unlockedByItem": null,
     "isUnlocked": true,
-    "icon": "stage_moonspell_icon.png",
+    "icon": "stage_spazie_icon.png",
     "hyperMod": {
       "rate": 1.0625,
       "detune": 0
@@ -70,5 +70,41 @@
       "rate": 1.125,
       "detune": -1000
     }
-  }
+  },
+  "1414": {
+    "title": "PAC TRONICA",
+    "author": "Hiroyuki Kawada",
+    "source": "",
+    "unlockedByStage": null,
+    "unlockedByCharacter": null,
+    "unlockedByItem": null,
+    "isUnlocked": true,
+    "icon": "stage_spazie_icon.png",
+    "hyperMod": {
+      "rate": 1.0625,
+      "detune": 0
+    },
+    "forsakenMod": {
+      "rate": 1.125,
+      "detune": -1000
+    }
+  },
+    "1415": {
+      "title": "PAC STEP",
+      "author": "Toshio Kai",
+      "source": "",
+      "unlockedByStage": null,
+      "unlockedByCharacter": null,
+      "unlockedByItem": null,
+      "isUnlocked": true,
+      "icon": "stage_spazie_icon.png",
+      "hyperMod": {
+        "rate": 1.0625,
+        "detune": 0
+      },
+      "forsakenMod": {
+        "rate": 1.125,
+        "detune": -1000
+      }
+    }
 }

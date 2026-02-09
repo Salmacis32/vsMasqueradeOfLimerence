@@ -160,12 +160,12 @@ namespace Masquerade
             CustomMusic = new Dictionary<int, SongData[]>();
             int id = MUSIC_START_ID;
 
-            //AddSong(id, "PacmanCE", "PAC TRONICA", ["BGM_Pactronica1.wav", "BGM_Pactronica2.wav"]); id++;
             AddSong(id, "Mob Smash", "Smash", ["BGM_MobSmash1.wav", "BGM_MobSmash2.wav"]); id++;
             AddSong(id, "PAC MADNESS", "PacmanCE", ["BGM_Pacmadness1.wav", "BGM_Pacmadness2.wav"]); id++;
             AddSong(id, "PAC TOY BOX", "PacmanCE", ["BGM_Pactoybox1.wav", "BGM_Pactoybox2.wav"]); id++;
-            AddSong(id, "PAC BABY", "PacmanCE", ["BGM_Pacbaby1.wav", "BGM_Pacbaby2.wav"]);
-            
+            AddSong(id, "PAC BABY", "PacmanCE", ["BGM_Pacbaby1.wav", "BGM_Pacbaby2.wav"]); id++;
+            AddSong(id, "PAC TRONICA", "PacmanCE", ["BGM_Pactronica1.wav", "BGM_Pactronica2.wav"]); id++;
+            AddSong(id, "PAC STEP", "PacmanCE", ["BGM_Pacstep1.wav", "BGM_Pacstep2.wav"]);
         }
 
         private static void AddSong(int id, string name, string album, string[] paths)

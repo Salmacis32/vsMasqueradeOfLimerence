@@ -1,4 +1,4 @@
-﻿namespace Masquerade
+﻿namespace Masquerade.Character
 {
     public static class CharacterStatNames
     {
