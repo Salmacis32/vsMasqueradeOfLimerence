@@ -56,16 +56,13 @@ namespace Masquerade.Patches
             Masquerade.Logger.Msg("Created modded dlc bundle.");
 
             ManifestLoader.LoadManifest(modDlcData, Common.VSML_DLC_TYPE, action);
-            var modAccessoryGen = Masquerade.Api.GetModAccessory<ExampleAccessory>();
-            Masquerade.Logger.Msg($"Acknlowedging mod accessory (from generic method) Id {modAccessoryGen.ContentId}: {modAccessoryGen.FullName}");
             LanguageData = null;
             return false;
         }
 
         public IEnumerable<PatchInstruction> GeneratePatchInstructions()
         {
-            var instructions = new List<PatchInstruction>();
-            instructions.Add(new PatchInstruction(TargetClass, nameof(DlcLoader.LoadDlc), typeof(DlcLoaderPatches).GetMethod(nameof(PreLoadDlc))));
+            var instructions = new List<PatchInstruction>() { new PatchInstruction(TargetClass, nameof(DlcLoader.LoadDlc), typeof(DlcLoaderPatches).GetMethod(nameof(PreLoadDlc))) };
             return instructions;
         }
 
@@ -122,7 +119,6 @@ namespace Masquerade.Patches
 
             var generation = WeaponDataSystem.GenerateCustomWeaponData(dict);
             var weaponData = new TextAsset(JsonConvert.SerializeObject(generation));
-            Masquerade.Logger.Msg(weaponData.text);
 
             return weaponData;
         }

@@ -19,9 +19,9 @@ namespace Masquerade
         private const string CUSTOM_AUDIO_FILE_PATH = "\\CustomAudio\\";
         private const string MUSIC_DATA_RESOURCE_FILE = "Masquerade.Data.musicData_Modded.json";
         private const string ALBUM_DATA_RESOURCE_FILE = "Masquerade.Data.albumData_Modded.json";
+        public static int CurrentContentId = Common.CONTENT_START_ID;
         public static string MusicJson;
         public static string AlbumJson;
-        public const int MUSIC_START_ID = 1410;
         public static IDictionary<int, SongData[]> CustomMusic;
         /// <summary>
         /// Harmony assembly
@@ -49,6 +49,7 @@ namespace Masquerade
             MasqueradeInitialized = false;
             Api = null;
             Instance = null;
+            CurrentContentId = Common.CONTENT_START_ID;
 
             LoggerInstance.Msg("Deinitialize Complete.");
         }
@@ -102,8 +103,7 @@ namespace Masquerade
 
         private int PopulateAccessories()
         {
-            Api.AccessoryFactory.AddContent(new ExampleAccessory() { Mod = this, ContentId = 10000 });
-            return 1;
+            return InitializeAccessories().Count();
         }
 
         private static IEnumerable<IClassPatcher> InitializePatchers()
@@ -118,6 +118,32 @@ namespace Masquerade
                     patchers.Add(patcher);
             }
             return patchers;
+        }
+
+        private IEnumerable<ModAccessory> InitializeAccessories()
+        {
+            var accessories = new List<ModAccessory>();
+            var types = AccessTools.GetTypesFromAssembly(AssemblyInstance).Where(x => typeof(ModAccessory).IsAssignableFrom(x) && !x.IsAbstract);
+            foreach (var type in types)
+            {
+                var modType = type.Assembly.GetTypes().SingleOrDefault(x => typeof(MasqMod).IsAssignableFrom(x) && !x.IsAbstract);
+                if (modType == null || !Api.DoesModExist(modType))
+                    continue;
+                var mod = Api.GetMod(modType);
+                if (mod == null || mod.IgnoreWeapons)
+                    continue;
+                var instance = AccessTools.CreateInstance(type);
+                var accessory = instance as ModAccessory;
+                if (accessory != null)
+                {
+                    accessory.Mod = mod;
+                    accessory.ContentId = CurrentContentId; CurrentContentId++;
+                    Api.AccessoryFactory.AddContent(accessory);
+                    Logger.Msg($"Added accessory {accessory.FullName}");
+                    accessories.Add(accessory);
+                }
+            }
+            return accessories;
         }
 
         private static int PatchMethods()
@@ -140,12 +166,6 @@ namespace Masquerade
                 patched++;
             }
 
-            var originalMethods = PatcherInstance.GetPatchedMethods();
-            foreach (var method in originalMethods) 
-            {
-                Logger.Msg($"{method.Name} {method.DeclaringType} {method.ReflectedType.Name}");
-            }
-
             return patched;
         }
 
@@ -158,7 +178,7 @@ namespace Masquerade
             read2 = new StreamReader(albmj);
             AlbumJson = read2.ReadToEnd();
             CustomMusic = new Dictionary<int, SongData[]>();
-            int id = MUSIC_START_ID;
+            int id = Common.MUSIC_START_ID;
 
             AddSong(id, "Mob Smash", "Smash", ["BGM_MobSmash1.wav", "BGM_MobSmash2.wav"]); id++;
             AddSong(id, "PAC MADNESS", "PacmanCE", ["BGM_Pacmadness1.wav", "BGM_Pacmadness2.wav"]); id++;

@@ -9,7 +9,7 @@ namespace Masquerade.Api
             if (LoadedMods == null) throw new NullReferenceException(ExceptionMessages.MODS_LIST_NOT_INIT);
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (mod == null) throw new ArgumentNullException(nameof(mod));
-            if (!DoesModExist(mod)) throw new ArgumentException($"Mod {mod.Name} has not been loaded by Masquerade.");
+            if (!DoesModExist(mod.GetType())) throw new ArgumentException($"Mod {mod.Name} has not been loaded by Masquerade.");
 
             return AccessoryFactory.GetContent(mod, name);
         }
@@ -46,7 +46,7 @@ namespace Masquerade.Api
             return character;
         }
 
-        public bool DoesModExist(MasqMod mod) => LoadedMods.Any(x => x == mod);
+        public bool DoesModExist(Type mod) => LoadedMods.Any(x => x.GetType() == mod);
         public bool DoesModExist(string name) => LoadedMods.Any(x => x.Name.Equals(name));
         public bool IsTypeModdedContent(int typeId)
         {
@@ -66,6 +66,11 @@ namespace Masquerade.Api
         public MasqMod GetMod(string name)
         {
             return LoadedMods.SingleOrDefault(x => x.Name.Equals(name));
+        }
+
+        public MasqMod GetMod(Type type)
+        {
+            return LoadedMods.SingleOrDefault(x => x.GetType() == type);
         }
     }
 }
