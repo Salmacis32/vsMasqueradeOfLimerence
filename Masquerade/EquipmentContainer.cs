@@ -4,7 +4,7 @@ using Masquerade.Models;
 
 namespace Masquerade
 {
-    public class EquipmentContainer : IInstanced
+    public class EquipmentContainer : IInstanced, IContainer
     {
         public EquipmentContainer() 
         {
@@ -12,7 +12,7 @@ namespace Masquerade
 
         public int InstanceId { get; internal set; } = -1;
 
-        public int EquipmentType { get; internal set; }
+        public int TypeId { get; internal set; }
 
         public string Name { get; internal set; }
 
@@ -21,5 +21,12 @@ namespace Masquerade
         public EquipmentStats EquipStats { get; internal set; }
 
         public CharacterStats ModifierStats { get; internal set; }
+
+        public bool UpdateContainerNextTick { get; }
+
+        public void UpdateContainer()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

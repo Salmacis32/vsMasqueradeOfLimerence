@@ -2,7 +2,6 @@
 using HarmonyLib;
 using Masquerade;
 using Masquerade.Api;
-using Masquerade.Examples;
 using Masquerade.Models;
 using MelonLoader;
 using MelonLoader.Utils;
@@ -139,7 +138,7 @@ namespace Masquerade
                     accessory.Mod = mod;
                     accessory.ContentId = CurrentContentId; CurrentContentId++;
                     Api.AccessoryFactory.AddContent(accessory);
-                    Logger.Msg($"Added accessory {accessory.FullName}");
+                    LoggerInstance.Msg($"Added accessory {accessory.FullName}");
                     accessories.Add(accessory);
                 }
             }
@@ -158,7 +157,9 @@ namespace Masquerade
 
             foreach (var instruction in patches)
             {
-                var method = (instruction.Parameters.Any()) ? AccessTools.DeclaredMethod(instruction.ClassOrigin, instruction.MethodToPatch, parameters: instruction.Parameters) : AccessTools.DeclaredMethod(instruction.ClassOrigin, instruction.MethodToPatch);
+                var method = (instruction.Parameters.Any()) 
+                    ? AccessTools.DeclaredMethod(instruction.ClassOrigin, instruction.MethodToPatch, parameters: instruction.Parameters) 
+                    : AccessTools.DeclaredMethod(instruction.ClassOrigin, instruction.MethodToPatch);
                 if (instruction.IsPrefix)
                     PatcherInstance.Patch(method, prefix: new HarmonyMethod(instruction.PatchMethod));
                 else

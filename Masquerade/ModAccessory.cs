@@ -1,6 +1,4 @@
-﻿using Il2CppVampireSurvivors.Objects;
-using Il2CppVampireSurvivors.Objects.Characters;
-using Masquerade.Equipment;
+﻿using Masquerade.Equipment;
 
 namespace Masquerade
 {

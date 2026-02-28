@@ -3,7 +3,7 @@ using Masquerade.Models;
 
 namespace Masquerade
 {
-    public class CharacterContainer : IInstanced
+    public class CharacterContainer : IInstanced, IContainer
     {
         private HashSet<EquipmentContainer> _equipment;
 
@@ -18,13 +18,15 @@ namespace Masquerade
             _equipment = new HashSet<EquipmentContainer>();
         }
 
-        public int CharacterType { get; internal set; }
+        public int TypeId { get; internal set; }
         public float CurrentHP { get; internal set; }
         public float Exp { get; internal set; }
         public int InstanceId { get; internal set; } = -1;
         public int Level { get; internal set; }
         public string Name { get; internal set; }
         public CharacterStats Stats { get; internal set; }
+
+        public bool UpdateContainerNextTick => throw new NotImplementedException();
 
         public EquipmentContainer GetEquipment(int contentId)
         {
@@ -34,7 +36,7 @@ namespace Masquerade
                 return null;
             }
 
-            return _equipment.SingleOrDefault(x => x.EquipmentType == contentId);
+            return _equipment.SingleOrDefault(x => x.TypeId == contentId);
         }
 
         public ModEquipment GetModEquipment(int contentId)
@@ -61,7 +63,7 @@ namespace Masquerade
 
         public bool HasAccessory<T>() where T : ModAccessory => HasEquipment<T>();
 
-        public bool HasEquipment(int contentId) => _equipment.Any(x => x.EquipmentType == contentId);
+        public bool HasEquipment(int contentId) => _equipment.Any(x => x.TypeId == contentId);
 
         public bool HasModEquipment<T>() where T : ModEquipment => HasEquipment<T>() && _modEquipment.Any(x => x.GetType().IsAssignableTo(typeof(T)));
 
@@ -75,9 +77,9 @@ namespace Masquerade
         {
             if (container == null)
                 return;
-            else if (HasEquipment(container.EquipmentType))
+            else if (HasEquipment(container.TypeId))
             {
-                Masquerade.Logger.Warning($"Cannot add {container.Name} to character {Name} {InstanceId} as it already has equipment with content id {container.EquipmentType}");
+                Masquerade.Logger.Warning($"Cannot add {container.Name} to character {Name} {InstanceId} as it already has equipment with content id {container.TypeId}");
                 return;
             }
 
@@ -97,15 +99,20 @@ namespace Masquerade
             if (!HasEquipment(contentId))
                 return;
 
-            _equipment = _equipment.Where(x => x.EquipmentType != contentId).ToHashSet();
+            _equipment = _equipment.Where(x => x.TypeId != contentId).ToHashSet();
         }
 
         internal void RemoveModEquipment(int contentId)
         {
             if (_modEquipment.Any(x => x.ContentId == contentId))
                 _modEquipment.Remove(GetModEquipment(contentId));
-            if (_equipment.Any(x => x.EquipmentType == contentId))
+            if (_equipment.Any(x => x.TypeId == contentId))
                 _equipment.Remove(GetEquipment(contentId));
+        }
+
+        public void UpdateContainer()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -15,8 +15,27 @@ namespace Masquerade.Patches
 {
     public class AccessoriesFacadePatches : IClassPatcher
     {
-        
         public Type TargetClass => typeof(AccessoriesFacade);
+
+        public static bool PreOnAdded(AccessoriesFacade __instance, WeaponType accessoryType, CharacterController characterController, bool removeFromStore = true)
+        {
+            if (!MasqueradeApi.ModdedCheck(accessoryType))
+            {
+                return true;
+            }
+            AddAccessory(__instance, accessoryType, characterController, removeFromStore);
+            return false;
+        }
+
+        public static bool PreOnRemoved(AccessoriesFacade __instance, WeaponType accessoryType, CharacterController characterController, bool notifyRemove = true)
+        {
+            if (!MasqueradeApi.ModdedCheck(accessoryType))
+            {
+                return true;
+            }
+            RemoveAccessory(__instance, accessoryType, characterController, notifyRemove);
+            return false;
+        }
 
         public IEnumerable<PatchInstruction> GeneratePatchInstructions()
         {
@@ -28,59 +47,13 @@ namespace Masquerade.Patches
             };
             return ints;
         }
-        
-        
-        public static bool PreOnAdded(AccessoriesFacade __instance, WeaponType accessoryType, CharacterController characterController, bool removeFromStore = true)
-        {
-            if (!ModdedCheck(accessoryType))
-            {
-                return true;
-            }
-            AddAccessory(__instance, accessoryType, characterController, removeFromStore);
-            return false;
-        }
-
-        public static bool PreOnRemoved(AccessoriesFacade __instance, WeaponType accessoryType, CharacterController characterController, bool notifyRemove = true)
-        {
-            if (!ModdedCheck(accessoryType))
-            {
-                return true;
-            }
-            RemoveAccessory(__instance, accessoryType, characterController, notifyRemove);
-            return false;
-        }
-
-        private static bool ModdedCheck(WeaponType item)
-        {
-            int contentId = (int)item;
-            if (!Masquerade.Api.IsTypeModdedContent(contentId) || !Masquerade.Api.IsContentAccessory(contentId))
-                return false;
-            
-            return  true;
-        }
 
         private static void AddAccessory(AccessoriesFacade facade, WeaponType accessoryType, CharacterController characterController, bool removeFromStore = true)
         {
             Accessory accessoryByType = characterController.AccessoriesManager.GetAccessoryByType(accessoryType, false);
             if (accessoryByType != null)
             {
-                if (accessoryByType.LevelUp(false))
-                {
-                    var cc = characterController.gameObject.GetOrAddComponent<GlobalInstanceComponent>();
-                    var cont = Masquerade.Api.GetOrAddCharacterInstance(characterController, cc);
-                    if (cont == null)
-                    {
-                        Masquerade.Logger.Error("Character container failed to load!");
-                        return;
-                    }
-                    Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, cont, characterController).OnLevelUp();
-                }
-                else
-                    facade._playerOptions.AddCoins(10f, characterController);
-
-                if (removeFromStore)
-                    facade._levelUpFactory.RemoveFromStore(accessoryType, characterController);
-
+                CheckLevelUp(facade, accessoryType, characterController, removeFromStore, accessoryByType);
                 return;
             }
 
@@ -91,22 +64,13 @@ namespace Masquerade.Patches
                 return;
             }
 
-            Transform transform = characterController.transform;
-            Accessory component = UnityEngine.Object.Instantiate(accessoryPrefab, transform.position, Quaternion.identity, transform).GetComponent<Accessory>();
+            Transform parent = characterController.transform;
+            Accessory component = UnityEngine.Object.Instantiate(accessoryPrefab, parent.position, Quaternion.identity, parent).GetComponent<Accessory>();
             component.Init(characterController, accessoryType);
             characterController.AccessoriesManager.AddEquipment(component);
 
-            var charComponent = characterController.gameObject.GetOrAddComponent<GlobalInstanceComponent>();
-            var container = Masquerade.Api.GetOrAddCharacterInstance(characterController, charComponent);
-            if (container == null)
-            {
-                Masquerade.Logger.Error("Character container failed to load!");
+            if (!CreateModdedInstances(accessoryType, characterController))
                 return;
-            }
-
-            var instance = Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container, characterController);
-            
-            instance.OnAccessoryAdded(container);
 
             facade._signalBus.Fire(new GameplaySignals.AccessoryAddedToCharacterSignal
             {
@@ -131,6 +95,31 @@ namespace Masquerade.Patches
                 }
             }
             facade._arcanaManager.CheckSilent();
+        }
+
+        private static void CheckLevelUp(AccessoriesFacade facade, WeaponType accessoryType, CharacterController characterController, bool removeFromStore, Accessory accessoryByType)
+        {
+            if (!accessoryByType.LevelUp())
+                facade._playerOptions.AddCoins(10f, characterController);
+
+            if (removeFromStore)
+                facade._levelUpFactory.RemoveFromStore(accessoryType, characterController);
+        }
+
+        private static bool CreateModdedInstances(WeaponType accessoryType, CharacterController characterController)
+        {
+            var charComponent = characterController.gameObject.GetOrAddComponent<GlobalInstanceComponent>();
+            var container = Masquerade.Api.GetOrAddCharacterInstance(characterController, charComponent);
+            if (container == null)
+            {
+                Masquerade.Logger.Error("Character container failed to load!");
+                return false;
+            }
+
+            var instance = Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container, characterController);
+
+            instance.OnAccessoryAdded(container);
+            return true;
         }
 
         private static void RemoveAccessory(AccessoriesFacade facade, WeaponType accessoryType, CharacterController characterController, bool notifyRemove = true)

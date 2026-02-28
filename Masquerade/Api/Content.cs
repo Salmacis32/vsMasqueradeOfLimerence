@@ -1,6 +1,4 @@
-﻿using Masquerade.Models;
-
-namespace Masquerade.Api
+﻿namespace Masquerade.Api
 {
     public partial class MasqueradeApi
     {
@@ -46,9 +44,7 @@ namespace Masquerade.Api
             return character;
         }
 
-        public bool DoesModExist(Type mod) => LoadedMods.Any(x => x.GetType() == mod);
-        public bool DoesModExist(string name) => LoadedMods.Any(x => x.Name.Equals(name));
-        public bool IsTypeModdedContent(int typeId)
+        public bool IsModdedContent(int typeId)
         {
             if (AccessoryFactory.DoesContentExist(typeId))
                 return true;
@@ -58,19 +54,9 @@ namespace Masquerade.Api
 
         public bool IsContentAccessory(int contentId)
         {
-            if (!IsTypeModdedContent(contentId)) return false;
+            if (!IsModdedContent(contentId)) return false;
             
             return AccessoryFactory.DoesContentExist(contentId);
-        }
-
-        public MasqMod GetMod(string name)
-        {
-            return LoadedMods.SingleOrDefault(x => x.Name.Equals(name));
-        }
-
-        public MasqMod GetMod(Type type)
-        {
-            return LoadedMods.SingleOrDefault(x => x.GetType() == type);
         }
     }
 }

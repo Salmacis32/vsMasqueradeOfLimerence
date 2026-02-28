@@ -1,4 +1,5 @@
-﻿using Il2CppVampireSurvivors.Data.Weapons;
+﻿using Il2CppVampireSurvivors.Data;
+using Il2CppVampireSurvivors.Data.Weapons;
 using Il2CppVampireSurvivors.Objects;
 using Il2CppVampireSurvivors.Objects.Characters;
 using Il2CppVampireSurvivors.Objects.Weapons;
@@ -44,10 +45,12 @@ namespace Masquerade.Api
             inst.Mod = proto.Mod;
             inst.ContentId = proto.ContentId;
             inst.Owner = container;
-            container.AddModEquipment(inst);
             SyncCharacterContainer(ref container, controller);
+            inst.Container = container.GetEquipment(inst.ContentId);
             return inst;
         }
+
+        internal IEnumerable<CharacterContainer> GetCharacterInstances() => _characters;
 
         internal CharacterContainer GetOrAddCharacterInstance(CharacterController controller, GlobalInstanceComponent component, bool resync = true)
         {
@@ -97,6 +100,15 @@ namespace Masquerade.Api
             _nextFreeGlobalInstanceId = 0;
         }
 
+        internal static bool ModdedCheck(WeaponType item)
+        {
+            int contentId = (int)item;
+            if (!Masquerade.Api.IsModdedContent(contentId) || !Masquerade.Api.IsContentAccessory(contentId))
+                return false;
+
+            return true;
+        }
+
         private int GetNextFreeGlobalInstanceId()
         {
             if (_characters.Any(x => x.InstanceId == _nextFreeGlobalInstanceId || x.HasEquipmentInstance(_nextFreeGlobalInstanceId)))
@@ -109,7 +121,7 @@ namespace Masquerade.Api
 
         private void SyncCharacterContainer(ref CharacterContainer container, CharacterController controller)
         {
-            container.CharacterType = (int)controller.CharacterType;
+            container.TypeId = (int)controller.CharacterType;
             container.CurrentHP = controller.CurrentHealth();
             container.Exp = controller.Xp;
             container.Name = controller.CharacterType.ToString();
@@ -125,19 +137,10 @@ namespace Masquerade.Api
 
         private CharacterStats SyncCharacterStats(CharacterController controller)
         {
-            var stats = new CharacterStats();
+            var stats = new CharacterStats(controller.PCooldown(), controller.MaxHp(), controller.PMoveSpeed(), 
+                controller.PGrowth(), controller.Magnet.scale, controller.PLuck(), controller.PArmor(),
+                controller.PRegen(), controller.PGreed(), controller.PCurse());
 
-            stats.Armor = controller.PArmor();
-            stats.Cooldown = controller.PCooldown();
-            stats.Curse = controller.PCurse();
-            stats.Greed = controller.PGreed();
-            stats.Growth = controller.PGrowth();
-            stats.HpRegen = controller.PRegen();
-            stats.Luck = controller.PLuck();
-            stats.MaxHp = controller.MaxHp();
-            stats.MoveSpeed = controller.PMoveSpeed();
-            
-            //stats.Magnet = controller.Magnet.
             // Add Player specific stats (rerolls, skips, banishes)
 
             return stats;
@@ -147,7 +150,7 @@ namespace Masquerade.Api
         {
             var container = new EquipmentContainer();
             container.Name = equipment.Type.ToString();
-            container.EquipmentType = (int)equipment.Type;
+            container.TypeId = (int)equipment.Type;
             container.Level = equipment.Level;
             container.InstanceId = GetNextFreeGlobalInstanceId();
 
@@ -157,69 +160,43 @@ namespace Masquerade.Api
             var cs = new CharacterStats();
             if (accessory != null)
             {
-                var data = SafeAccess.GetProperty<WeaponData>(accessory, "CurrentAccessoryData");
+                var data = SafeAccess.GetProperty<WeaponData>(accessory, nameof(accessory.CurrentAccessoryData));
                 if (data == null)
                 {
-                    Masquerade.Logger.Error($"Attempted to load CurrentAccessoryData for equipment {container.EquipmentType} instance {container.InstanceId} and failed!");
+                    Masquerade.Logger.Error($"Attempted to load CurrentAccessoryData for equipment {container.TypeId} instance {container.InstanceId} and failed!");
                     return container;
                 }
                 es = SetEquipStats(data);
                 cs = SetModifierStats(data);
             }
             else if (weapon != null) {
-                var data = SafeAccess.GetProperty<WeaponData>(weapon, "CurrentWeaponData");
+                var data = SafeAccess.GetProperty<WeaponData>(weapon, nameof(weapon.CurrentWeaponData));
                 if (data == null)
                 {
-                    Masquerade.Logger.Error($"Attempted to load CurrentWeaponData for equipment {container.EquipmentType} instance {container.InstanceId} and failed!");
+                    Masquerade.Logger.Error($"Attempted to load CurrentWeaponData for equipment {container.TypeId} instance {container.InstanceId} and failed!");
                     return container;
                 }
                 es = SetEquipStats(data);
+                cs = SetModifierStats(data);
             }
 
             container.EquipStats = es;
             container.ModifierStats = cs;
-            return container;   
+            return container;
         }
 
         private EquipmentStats SetEquipStats(WeaponData data)
         {
-            var es = new EquipmentStats();
-            es.Area = data.area;
-            es.Interval = data.interval;
-            es.Amount = data.amount;
-            es.Power = data.power;
-            es.CritChance = data.critChance;
-            es.CritMultiplier = data.critMul;
-            es.CanHitWalls = data.hitsWalls;
-            es.Chance = data.chance;
-            es.PierceAmount = data.penetrating;
-            es.ProjectileSpeed = data.speed;
+            var kb = SafeAccess.GetProperty<Il2CppSystem.Nullable<float>>(data, nameof(data.knockback));
+            var pl = SafeAccess.GetProperty<Il2CppSystem.Nullable<int>>(data, nameof(data.poolLimit));
+            var dr = SafeAccess.GetProperty<Il2CppSystem.Nullable<int>>(data, nameof(data.duration));
 
-            var kb = SafeAccess.GetProperty<Il2CppSystem.Nullable<float>>(data, "knockback");
-            es.Knockback = (kb != null) ? kb.Value : 0f;
-            var pl = SafeAccess.GetProperty<Il2CppSystem.Nullable<int>>(data, "poolLimit");
-            es.ProjectileLimit = (pl != null) ? pl.Value : 0;
+            var es = new EquipmentStats(data.power, data.area, data.speed, data.amount, data.critChance, data.critMul, data.repeatInterval, data.interval, data.chance, data.penetrating,
+                (dr != null && dr.HasValue) ? dr.Value : null, (pl != null && pl.HasValue) ? pl.Value : null, (kb != null && kb.HasValue) ? kb.Value : null, data.hitsWalls);
             return es;
         }
 
-        private CharacterStats SetModifierStats(WeaponData data)
-        {
-            var cs = new CharacterStats();
-            cs.Growth = data.growth;
-            cs.Armor = data.armor;
-            cs.Skips = data.skips;
-            cs.MaxHp = data.maxHp;
-            cs.HpRegen = data.regen;
-            cs.Greed = data.greed;
-            cs.Cooldown = data.cooldown;
-            cs.Luck = data.luck;
-            cs.Curse = data.curse;
-            cs.Magnet = data.magnet;
-            cs.Revivals = data.revivals;
-            cs.Rerolls = data.rerolls;
-            cs.Skips = data.skips;
-            cs.MoveSpeed = data.speed;
-            return cs;
-        }
+        private CharacterStats SetModifierStats(WeaponData data) => new CharacterStats(data.cooldown, data.maxHp, data.speed, data.growth, data.magnet, data.luck, 
+            data.armor, data.regen, data.greed, data.curse);
     }
 }

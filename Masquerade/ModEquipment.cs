@@ -38,7 +38,9 @@ namespace Masquerade
 
         public virtual string Tips { get; protected set; } = "";
 
-        public CharacterContainer Owner { get; set; }
+        public CharacterContainer Owner { get; internal set; }
+
+        public EquipmentContainer Container { get; internal set; }
 
         public void AddLevelUp(string stat, float value, int atLevel = 1)
         {

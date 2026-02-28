@@ -59,12 +59,15 @@
 		<Compile Include="CharacterContainer.cs" />
 		<Compile Include="ModCharacterEffects.cs" />
 		<Compile Include="Models\DynamicSoundGroupFactory.cs" />
+		<Compile Include="Models\IContainer.cs" />
 		<Compile Include="Models\IInstanced.cs" />
 		<Compile Include="Models\GlobalInstanceComponent.cs" />
 		<Compile Include="Models\ModInstanceComponent.cs" />
 		<Compile Include="Models\SongData.cs" />
 		<Compile Include="Patches\AccessoriesFacadePatches.cs" />
+		<Compile Include="Patches\AccessoryPatches.cs" />
 		<Compile Include="Patches\GameManagerPatches.cs" />
+		<Compile Include="Systems\ContainerUpdateSystem.cs" />
 		<Compile Include="Util\Il2CppDictionaryExtensions.cs" />
 		<Compile Include="Util\Il2CppEnumerableExtensions.cs" />
 		<Compile Include="Util\Il2CppListExtensions.cs" />

@@ -2,22 +2,41 @@
 {
     public struct EquipmentStats
     {
-        public float Power;
-        public float Area;
-        public float ProjectileSpeed;
-        public int Amount;
-        public float Duration;
-        public float CritChance;
-        public float CritMultiplier;
-        public float Knockback;
-        public int Charges;
-        public int PierceAmount;
-        public float RepeatDelay;
-        public float Interval;
-        public float Chance;
-        public int ProjectileLimit;
-        public bool IntervalAddsDuration;
-        public int HitBoxDelay;
-        public bool CanHitWalls;
+        public EquipmentStats() { }
+        public EquipmentStats(float pwr, float are, float spd, int amt, float crt, float mul, float del, float itv, float cha, int pen, float? dur = null, int? lim = null, float? kbk = null, bool wal = false) 
+        {
+            Power = pwr;
+            Area = are;
+            ProjectileSpeed = spd;
+            Amount = amt;
+            Duration = dur;
+            CritChance = crt;
+            CritMultiplier = mul;
+            Knockback = kbk;
+            RepeatDelay = del;
+            Interval = itv;
+            Chance = cha;
+            ProjectileLimit = lim;
+            CanHitWalls = wal;
+            PierceAmount = pen;
+        }
+
+        public float Power { get; set; }
+        public float Area { get; set; }
+        public float ProjectileSpeed { get; set; }
+        public int Amount { get; set; }
+        public float? Duration { get; set; }
+        public float CritChance { get; set; }
+        public float CritMultiplier { get; set; }
+        public float? Knockback { get; set; }
+        public int Charges { get; set; }
+        public int PierceAmount { get; set; }
+        public float RepeatDelay { get; set; }
+        public float Interval { get; set; }
+        public float Chance { get; set; }
+        public int? ProjectileLimit { get; set; }
+        public bool IntervalAddsDuration { get; set; }
+        public int HitBoxDelay { get; set; }
+        public bool CanHitWalls { get; set; }
     }
 }
