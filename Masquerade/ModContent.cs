@@ -4,7 +4,7 @@
     {
         public ModContent() { }
         public MasqMod Mod { get; internal set; }
-        internal int ContentId;
+        public int ContentId { get; internal set; }
         public virtual string ContentName { get => GetType().Name; }
 
         public string FullName => Mod.Name + "." + ContentName;

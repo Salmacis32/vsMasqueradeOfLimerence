@@ -8,6 +8,7 @@ using Il2CppVampireSurvivors.Signals;
 using Il2CppZenject;
 using Masquerade.Api;
 using Masquerade.Models;
+using Masquerade.Util;
 using UnityEngine;
 
 namespace Masquerade.Patches
@@ -18,7 +19,7 @@ namespace Masquerade.Patches
 
         public static bool PreOnAdded(AccessoriesFacade __instance, WeaponType accessoryType, CharacterController characterController, bool removeFromStore = true)
         {
-            if (!MasqueradeApi.ModdedCheck(accessoryType))
+            if (!Masquerade.Api.ModdedEquipmentCheck(accessoryType))
                 return true;
 
             if (CheckLevelUp(accessoryType, __instance, characterController, removeFromStore)) return false;
@@ -31,7 +32,7 @@ namespace Masquerade.Patches
 
         public static void PreOnRemoved(AccessoriesFacade __instance, WeaponType accessoryType, CharacterController characterController, bool notifyRemove = true)
         {
-            if (!MasqueradeApi.ModdedCheck(accessoryType))
+            if (!Masquerade.Api.ModdedEquipmentCheck(accessoryType))
                 return;
 
             RemoveModdedInstances(accessoryType, characterController);
@@ -52,13 +53,13 @@ namespace Masquerade.Patches
             var container = Masquerade.Api.GetOrAddCharacterInstance(characterController);
             if (container == null)
             {
-                Masquerade.Logger.Error("Character container failed to load!");
+                LoggerHelper.Logger.Error("Character container failed to load!");
                 return;
             }
 
             var instance = Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container, characterController);
 
-            instance.OnAccessoryAdded(container, characterController);
+            instance.OnAccessoryAdded(characterController);
         }
 
         private static void RemoveModdedInstances(WeaponType accessoryType, CharacterController characterController)
@@ -66,10 +67,10 @@ namespace Masquerade.Patches
             var container = Masquerade.Api.GetOrAddCharacterInstance(characterController);
             if (container == null)
             {
-                Masquerade.Logger.Error("Character container failed to load!");
+                LoggerHelper.Logger.Error("Character container failed to load!");
                 return;
             }
-            Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container, characterController).OnAccessoryRemoved(container);
+            Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container, characterController).OnAccessoryRemoved(characterController);
             Masquerade.Api.DeleteEquipmentInstance((int)accessoryType, container);
         }
 
@@ -91,7 +92,7 @@ namespace Masquerade.Patches
             Accessory accessoryPrefab = facade._accessoriesFactory.GetAccessoryPrefab(accessoryType);
             if (accessoryPrefab == null)
             {
-                Masquerade.Logger.Error($"Prefab for accessory {accessoryType} not found!");
+                LoggerHelper.Logger.Error($"Prefab for accessory {accessoryType} not found!");
                 return null;
             }
             Accessory component = UnityEngine.Object.Instantiate(facade._accessoriesFactory.GetAccessoryPrefab(accessoryType), characterController.transform.position, Quaternion.identity, characterController.transform)

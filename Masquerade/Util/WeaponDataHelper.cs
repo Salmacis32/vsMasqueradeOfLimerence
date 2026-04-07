@@ -1,9 +1,9 @@
 ﻿using Masquerade.Equipment;
 using Newtonsoft.Json.Linq;
 
-namespace Masquerade.Systems
+namespace Masquerade.Util
 {
-    internal static class WeaponDataSystem
+    internal static class WeaponDataHelper
     {
         internal static IDictionary<int, JArray> GenerateCustomWeaponData(IDictionary<MasqMod, IEnumerable<ModEquipment>> equipment)
         {
@@ -14,7 +14,7 @@ namespace Masquerade.Systems
 
             foreach (var equip in accessories)
             {
-                allWeaponData.Add(equip.ContentId, (JArray)SerializeEquipment(equip));
+                allWeaponData.Add(equip.WeaponTypeId, (JArray)SerializeEquipment(equip));
             }
 
             return allWeaponData;
@@ -32,7 +32,7 @@ namespace Masquerade.Systems
                 {
                     tokenWriter.WritePropertyName(WeaponDataNames.Level); tokenWriter.WriteValue(l);
                     tokenWriter.WritePropertyName(WeaponDataNames.Name); tokenWriter.WriteValue(eq.DisplayName);
-                    tokenWriter.WritePropertyName(WeaponDataNames.ProjectileName); tokenWriter.WriteValue(eq.ContentId.ToString());
+                    tokenWriter.WritePropertyName(WeaponDataNames.ProjectileName); tokenWriter.WriteValue(eq.WeaponTypeId.ToString());
                     tokenWriter.WritePropertyName(WeaponDataNames.TextureName); tokenWriter.WriteValue(eq.TextureName);
                     tokenWriter.WritePropertyName(WeaponDataNames.SpriteName); tokenWriter.WriteValue(eq.TextureName);
                     tokenWriter.WritePropertyName(WeaponDataNames.ContentGroup); tokenWriter.WriteValue("EXTRA");

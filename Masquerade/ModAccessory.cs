@@ -14,8 +14,8 @@ namespace Masquerade
 
         public override int MaxLevel => EquipmentDefaults.MaxAccessoryLevel;
 
-        public virtual void OnAccessoryAdded(CharacterContainer character, CharacterController controller) { }
-        public virtual void OnAccessoryRemoved(CharacterContainer character) { }
+        public virtual void OnAccessoryAdded(CharacterController controller) { }
+        public virtual void OnAccessoryRemoved(CharacterController controller) { }
 
         public virtual void OnLevelUp(CharacterController controller) { }
     }

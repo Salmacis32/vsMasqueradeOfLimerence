@@ -21,7 +21,7 @@ namespace Masquerade.Models
             if (ProjectContext._instance == null) return null;
             var sounds = ProjectContext._instance._container.InstantiateComponentOnNewGameObject<DynamicSoundGroupCreator>();
             sounds.musicPlaylists = new Il2Col.List<Playlist>();
-            foreach (var song in Masquerade.CustomMusic)
+            foreach (var song in Masquerade.Instance.CustomMusic)
             {
                 Playlist playlist = new Playlist() { playlistName = song.Key.ToString() };
                 foreach (var clip in song.Value)

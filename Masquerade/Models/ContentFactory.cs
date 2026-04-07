@@ -1,12 +1,14 @@
-﻿using MelonLoader;
+﻿using Masquerade.Util;
+using MelonLoader;
 
 namespace Masquerade.Models
 {
-    internal sealed class ContentFactory<T> where T : ModContent
+    internal class ContentFactory<T> where T : ModContent
     {
-        private HashSet<T> _content;
+        protected HashSet<T> _content;
 
         internal HashSet<T> GetAllContent() => [.. _content];
+        internal IEnumerable<int> GetContentIds() => _content.Select(x => x.ContentId);
 
         internal ContentFactory()
         {
@@ -17,18 +19,18 @@ namespace Masquerade.Models
         {
             if (content == null)
             {
-                Masquerade.Logger.Error("Content being added is null! Skipping...");
+                LoggerHelper.Logger.Error("Content being added is null! Skipping...");
                 return false;
             }
             if (_content.Any(x => x.ContentId == content.ContentId))
             {
-                Masquerade.Logger.Error("ContentId already exists! Skipping...");
+                LoggerHelper.Logger.Error("ContentId already exists! Skipping...");
                 return false;
             }
             return _content.Add(content);
         }
 
-        internal T GetContent(int ContentId) => _content.SingleOrDefault(x => x.ContentId == ContentId);
+        internal T GetContent(int contentId) => _content.SingleOrDefault(x => x.ContentId == contentId);
 
         internal T GetContent(MasqMod Mod, string ContentName) => _content.SingleOrDefault(x => x.ContentName == ContentName && x.Mod == Mod);
 

@@ -1,6 +1,7 @@
 ﻿using Il2CppVampireSurvivors.Objects.Characters;
 using Masquerade.Character;
 using Masquerade.Stats;
+using Masquerade.Util;
 
 namespace Masquerade.Examples
 {
@@ -25,19 +26,19 @@ namespace Masquerade.Examples
         /// </summary>
         public override ShopTags ShopTags => ShopTags.StartsSeen | ShopTags.StartsUnlocked;
 
-        public override void OnAccessoryAdded(CharacterContainer character, CharacterController controller)
+        public override void OnAccessoryAdded(CharacterController controller)
         {
-            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Added to character {character.Name} level {character.Level}");
+            LoggerHelper.Logger.Msg($"{nameof(ExampleAccessory)} Added to character {controller.name} level {controller.Level}");
         }
 
-        public override void OnAccessoryRemoved(CharacterContainer character)
+        public override void OnAccessoryRemoved(CharacterController controller)
         {
-            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Removed from character {character.Name} level {character.Level}");
+            LoggerHelper.Logger.Msg($"{nameof(ExampleAccessory)} Removed from character {controller.name} level {controller.Level}");
         }
 
         public override void OnLevelUp(CharacterController controller)
         {
-            Masquerade.Logger.Msg($"{nameof(ExampleAccessory)} Leveled Up on character {Owner.Name}");
+            LoggerHelper.Logger.Msg($"{nameof(ExampleAccessory)} Leveled Up on character {controller.name}");
         }
     }
 }

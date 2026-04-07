@@ -1,11 +1,20 @@
-﻿using Masquerade.Models;
+﻿using Il2CppVampireSurvivors.Interfaces;
+using Il2CppVampireSurvivors.Objects.Characters;
+using Masquerade.Models;
 
 namespace Masquerade
 {
-    public abstract class ModCharacterEffect : ModContent, IInstanced
+    public abstract class ModCharacterEffect : ModContent
     {
-        public CharacterContainer Owner { get; internal set; }
+        public ModCharacterEffect()
+        {
+            if (DisplayName == null) DisplayName = ContentName;
+        }
         public string DisplayName { get; set; }
-        public int InstanceId { get; internal set; } = -1;
+
+        public virtual void OnUpdate(CharacterController owner)
+        {
+
+        }
     }
 }

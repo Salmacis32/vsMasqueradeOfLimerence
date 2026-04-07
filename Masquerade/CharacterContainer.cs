@@ -1,5 +1,6 @@
 ﻿using Masquerade.Character;
 using Masquerade.Models;
+using Masquerade.Util;
 
 namespace Masquerade
 {
@@ -28,50 +29,46 @@ namespace Masquerade
 
         public bool UpdateContainerNextTick => throw new NotImplementedException();
 
-        public EquipmentContainer GetEquipment(int contentId)
+        public EquipmentContainer GetEquipment(int weaponTypeId)
         {
-            if (!HasEquipment(contentId))
+            if (!HasEquipment(weaponTypeId))
             {
-                Masquerade.Logger.Error($"{Name} {InstanceId} tried to load equipment container with id {contentId} and failed!");
+                Masquerade.Instance.LoggerInstance.Error($"{Name} {InstanceId} tried to load equipment container with WeaponType {weaponTypeId} and failed!");
                 return null;
             }
 
-            return _equipment.SingleOrDefault(x => x.TypeId == contentId);
+            return _equipment.SingleOrDefault(x => x.TypeId == weaponTypeId);
         }
 
-        public ModEquipment GetModEquipment(int contentId)
+        public ModEquipment GetModEquipment(int weaponTypeId)
         {
-            if (!HasModEquipment(contentId))
+            if (!HasModEquipment(weaponTypeId))
             {
-                Masquerade.Logger.Error($"{Name} {InstanceId} tried to load mod equipment with id {contentId} and failed!");
+                Masquerade.Instance.LoggerInstance.Error($"{Name} {InstanceId} tried to load mod equipment with WeaponType {weaponTypeId} and failed!");
                 return null;
             }
 
-            return _modEquipment.SingleOrDefault(x => x.ContentId == contentId);
+            return _modEquipment.SingleOrDefault(x => x.WeaponTypeId == weaponTypeId);
         }
 
         public ModEquipment GetModEquipment<T>() where T : ModEquipment
         {
             if (!HasModEquipment<T>())
             {
-                Masquerade.Logger.Error($"{Name} {InstanceId} tried to load mod equipment {typeof(T).Name} and failed!");
+                Masquerade.Instance.LoggerInstance.Error($"{Name} {InstanceId} tried to load mod equipment {typeof(T).Name} and failed!");
                 return null;
             }
 
             return _modEquipment.SingleOrDefault(x => x.GetType() == typeof(T));
         }
 
-        public bool HasAccessory<T>() where T : ModAccessory => HasEquipment<T>();
+        public bool HasModAccessory<T>() where T : ModAccessory => HasModEquipment<T>();
 
-        public bool HasEquipment(int contentId) => _equipment.Any(x => x.TypeId == contentId);
+        public bool HasEquipment(int weaponTypeId) => _equipment.Any(x => x.TypeId == weaponTypeId);
 
-        public bool HasModEquipment<T>() where T : ModEquipment => HasEquipment<T>() && _modEquipment.Any(x => x.GetType().IsAssignableTo(typeof(T)));
+        public bool HasModEquipment<T>() where T : ModEquipment => _modEquipment.Any(x => x.GetType() == typeof(T)) && _modEquipment.Any(x => x.GetType().IsAssignableTo(typeof(T)));
 
-        public bool HasModEquipment(int contentId) => HasEquipment(contentId) && _modEquipment.Any(x => x.ContentId == contentId);
-
-        public bool HasEquipmentInstance(int instanceId) => _equipment.Any(x => x.InstanceId == instanceId);
-
-        public bool HasEquipment<T>() where T : ModEquipment => _modEquipment.Any(x => x.GetType() == typeof(T));
+        public bool HasModEquipment(int weaponTypeId) => _modEquipment.Any(x => x.WeaponTypeId == weaponTypeId);
 
         public bool HasEffect<T>() where T : ModCharacterEffect => _modEffects.Any(x => x.GetType() == typeof(T));
 
@@ -81,7 +78,7 @@ namespace Masquerade
         {
             if (!canStack && HasEffect(effect.GetType()))
             {
-                Masquerade.Logger.Warning($"Character already has an instance of {effect.FullName}.");
+                LoggerHelper.Logger.Warning($"Character already has an instance of {effect.FullName}.");
                 return;
             }
 
@@ -94,7 +91,7 @@ namespace Masquerade
                 return;
             else if (HasEquipment(container.TypeId))
             {
-                Masquerade.Logger.Warning($"Cannot add {container.Name} to character {Name} {InstanceId} as it already has equipment with content id {container.TypeId}");
+                LoggerHelper.Logger.Warning($"Cannot add {container.Name} to character {Name} {InstanceId} as it already has equipment with content id {container.TypeId}");
                 return;
             }
 
@@ -103,7 +100,7 @@ namespace Masquerade
 
         internal void AddModEquipment(ModEquipment equip)
         {
-            if (HasModEquipment(equip.ContentId))
+            if (HasModEquipment(equip.WeaponTypeId) || !HasEquipment(equip.WeaponTypeId))
                 return;
 
             _modEquipment.Add(equip);
@@ -117,12 +114,12 @@ namespace Masquerade
             _equipment = _equipment.Where(x => x.TypeId != contentId).ToHashSet();
         }
 
-        internal void RemoveModEquipment(int contentId)
+        internal void RemoveModEquipment(int typeId)
         {
-            if (_modEquipment.Any(x => x.ContentId == contentId))
-                _modEquipment.Remove(GetModEquipment(contentId));
-            if (_equipment.Any(x => x.TypeId == contentId))
-                _equipment.Remove(GetEquipment(contentId));
+            if (_modEquipment.Any(x => x.WeaponTypeId == typeId))
+                _modEquipment.Remove(GetModEquipment(typeId));
+            if (_equipment.Any(x => x.TypeId == typeId))
+                _equipment.Remove(GetEquipment(typeId));
         }
 
         public void UpdateContainer()

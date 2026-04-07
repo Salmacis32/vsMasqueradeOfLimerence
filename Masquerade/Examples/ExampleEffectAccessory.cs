@@ -1,8 +1,9 @@
 ﻿using HarmonyLib;
+using Il2CppVampireSurvivors.Data;
 using Il2CppVampireSurvivors.Objects.Characters;
 using Masquerade.Character;
+using Masquerade.Equipment;
 using Masquerade.Stats;
-using Masquerade.Util;
 
 namespace Masquerade.Examples
 {
@@ -18,27 +19,32 @@ namespace Masquerade.Examples
 
         public override int MaxLevel => 2;
 
-        private readonly float ChargePrecentage = 0.5f;
+        private readonly float ChargePrecentage = 2f;
+
+        private int _effectId;
 
         public ExampleEffectAccessory() : base()
         {
-            LevelingManager.AddAtLevel(level: 2, datapoint: "customDescValue", "Charge Speed increased by %0. ");
-            LevelingManager.AddAtLevel(level: 2, stat: "customDesc", ChargePrecentage * 100);
+            LevelingManager.AddAtLevel(level: 2, datapoint: WeaponDataNames.CustomDescription, "Charge Speed increased by an additional %0%");
+            LevelingManager.AddAtLevel(level: 2, stat: WeaponDataNames.CustomDescriptionVariable, ChargePrecentage * 100);
         }
 
         public override ShopTags ShopTags => ShopTags.StartsSeen | ShopTags.StartsUnlocked;
 
-        public override void OnAccessoryAdded(CharacterContainer character, CharacterController controller)
+        public override void OnAccessoryAdded(CharacterController controller)
         {
             if (controller == null) return;
             var charlot = controller.TryCast<TP_Charlotte_Character>();
             if (charlot == null) return;
-            charlot._maxChargeTimeMS *= ChargePrecentage;
+            var effect = Masquerade.Api.GetModCharacterEffect<ExampleEffect>();
+            _effectId = effect.ContentId;
+            effect.CurrentMultiplier = ChargePrecentage;
+            Masquerade.Instance.ModEffectSystem.AddInstance(controller, effect);
         }
 
-        public override void OnAccessoryRemoved(CharacterContainer character)
+        public override void OnAccessoryRemoved(CharacterController controller)
         {
-            
+            Masquerade.Instance.ModEffectSystem.RemoveInstance(controller, _effectId);
         }
 
         public override void OnLevelUp(CharacterController controller)
@@ -46,7 +52,9 @@ namespace Masquerade.Examples
             if (controller == null) return;
             var charlot = controller.TryCast<TP_Charlotte_Character>();
             if (charlot == null) return;
-            charlot._maxChargeTimeMS *= ChargePrecentage;
+
+            if (Masquerade.Instance.ModEffectSystem.TryGetEffect<ExampleEffect>(controller, out ExampleEffect effect))
+                effect.CurrentMultiplier = ChargePrecentage * controller.AccessoriesManager.GetAccessoryByType((WeaponType)WeaponTypeId).Level;
         }
     }
 }

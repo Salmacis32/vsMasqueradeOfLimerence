@@ -13,6 +13,10 @@ namespace Masquerade
         public const DlcType VSML_DLC_TYPE = (DlcType)10000;
         public static bool ModLoaded;
         public const int MUSIC_START_ID = 1410;
-        public const int CONTENT_START_ID = 10000;
+        public const int WEAPONTYPE_START_ID = 10000;
+
+        public const int GLOBAL_INSTANCE_ID_INDEX = 0;
+        public const int CONTENT_ID_INDEX = 1;
+        public const int WEAPON_ID_INDEX = 2;
     }
 }

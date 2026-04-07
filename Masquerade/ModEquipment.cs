@@ -14,8 +14,9 @@ namespace Masquerade
 
         private void Initialize()
         {
-            if (DisplayName is null) DisplayName = ContentName;
-            if (TextureName is null) TextureName = ContentName;
+            if (string.IsNullOrEmpty(DisplayName)) DisplayName = ContentName;
+            if (string.IsNullOrEmpty(TextureName)) TextureName = ContentName;
+            if (string.IsNullOrEmpty(Description)) Description = "Modded Item";
             LevelingManager = new LevelingManager();
             AddLevelUp(WeaponDataNames.ShopPrice, Price);
             AddLevelUp(WeaponDataNames.ShopRarity, AppearenceRate);
@@ -26,7 +27,7 @@ namespace Masquerade
         }
 
         public virtual int AppearenceRate { get; protected set; }
-        public virtual string Description { get; protected set; } = "Modded Item";
+        public virtual string Description { get; protected set; } 
         public virtual string DisplayName { get; protected set; }
 
         public LevelingManager LevelingManager { get; private set; }
@@ -36,7 +37,9 @@ namespace Masquerade
         public virtual ShopTags ShopTags { get; protected set; }
         public virtual string TextureName { get; internal set; }
 
-        public virtual string Tips { get; protected set; } = "";
+        public virtual string Tips { get; protected set; } = string.Empty;
+
+        public int WeaponTypeId { get; internal set; } = -1;
 
         public CharacterContainer Owner { get; internal set; }
 

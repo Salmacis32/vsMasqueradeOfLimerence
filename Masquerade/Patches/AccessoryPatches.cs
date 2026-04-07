@@ -2,6 +2,7 @@
 using Il2CppVampireSurvivors.Objects;
 using Masquerade.Api;
 using Masquerade.Models;
+using Masquerade.Util;
 
 namespace Masquerade.Patches
 {
@@ -11,14 +12,14 @@ namespace Masquerade.Patches
 
         public static void PostLevelUp(Accessory __instance)
         {
-            if (!MasqueradeApi.ModdedCheck(__instance.Type))
+            if (!Masquerade.Api.ModdedEquipmentCheck(__instance.Type))
                 return;
 
             var owner = __instance.Owner;
             var cont = Masquerade.Api.GetOrAddCharacterInstance(owner);
             if (cont == null)
             {
-                Masquerade.Logger.Error("Character container failed to load!");
+                LoggerHelper.Logger.Error("Character container failed to load!");
                 return;
             }
             Masquerade.Api.GetOrAddModAccessoryInstance((int)__instance.Type, cont, owner).OnLevelUp(owner);

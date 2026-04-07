@@ -4,13 +4,11 @@ using Masquerade.Models;
 
 namespace Masquerade
 {
-    public class EquipmentContainer : IInstanced, IContainer
+    public class EquipmentContainer : IContainer
     {
         public EquipmentContainer() 
         {
         }
-
-        public int InstanceId { get; internal set; } = -1;
 
         public int TypeId { get; internal set; }
 
@@ -26,7 +24,7 @@ namespace Masquerade
 
         public void UpdateContainer()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

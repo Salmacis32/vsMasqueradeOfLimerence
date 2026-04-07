@@ -1,18 +1,20 @@
 ﻿namespace Masquerade.Equipment
 {
-    internal static class WeaponDataNames
+    public static class WeaponDataNames
     {
-        internal const string Sealable = "sealable";
-        internal const string StartsSeen = "seen";
-        internal const string StartsUnlocked = "isUnlocked";
-        internal const string EquipmentIsAccessory = "isPowerup";
-        internal const string Level = "level";
-        internal const string Name = "name";
-        internal const string ProjectileName = "bulletType";
-        internal const string ContentGroup = "contentGroup";
-        internal const string TextureName = "texture";
-        internal const string SpriteName = "frameName";
-        internal const string ShopPrice = "price";
-        internal const string ShopRarity = "rarity";
+        public const string Sealable = "sealable";
+        public const string StartsSeen = "seen";
+        public const string StartsUnlocked = "isUnlocked";
+        public const string EquipmentIsAccessory = "isPowerup";
+        public const string Level = "level";
+        public const string Name = "name";
+        public const string ProjectileName = "bulletType";
+        public const string ContentGroup = "contentGroup";
+        public const string TextureName = "texture";
+        public const string SpriteName = "frameName";
+        public const string ShopPrice = "price";
+        public const string ShopRarity = "rarity";
+        public const string CustomDescription = "customDescValue";
+        public const string CustomDescriptionVariable = "customDesc";
     }
 }

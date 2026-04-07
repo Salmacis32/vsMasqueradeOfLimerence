@@ -2,61 +2,48 @@
 {
     public partial class MasqueradeApi
     {
-        public ModAccessory GetModAccessory(MasqMod mod, string name)
+        public ModCharacterEffect GetModCharacterEffect(MasqMod mod, string name)
         {
             if (LoadedMods == null) throw new NullReferenceException(ExceptionMessages.MODS_LIST_NOT_INIT);
             if (name == null) throw new ArgumentNullException(nameof(name));
             if (mod == null) throw new ArgumentNullException(nameof(mod));
             if (!DoesModExist(mod.GetType())) throw new ArgumentException($"Mod {mod.Name} has not been loaded by Masquerade.");
 
-            return AccessoryFactory.GetContent(mod, name);
+            return CharacterEffectFactory.GetContent(mod, name);
         }
 
-        public ModAccessory GetModAccessory(int contentId)
+        public ModCharacterEffect GetModCharacterEffect(int contentId)
         {
             if (LoadedMods == null) throw new NullReferenceException(ExceptionMessages.MODS_LIST_NOT_INIT);
             if (contentId < 0) throw new ArgumentOutOfRangeException(nameof(contentId));
 
-            return AccessoryFactory.GetContent(contentId);
+            return CharacterEffectFactory.GetContent(contentId);
         }
 
-        public T GetModAccessory<T>() where T : ModAccessory
+        public T GetModCharacterEffect<T>() where T : ModCharacterEffect
         {
             if (LoadedMods == null) throw new NullReferenceException(ExceptionMessages.MODS_LIST_NOT_INIT);
 
-            return AccessoryFactory.GetContent<T>();
+            return CharacterEffectFactory.GetContent<T>();
         }
 
-        public CharacterContainer GetEquipmentOwner(ModEquipment modEquipment)
+        public bool IsModdedEquipment(int weaponTypeId)
         {
-            if (modEquipment == null || modEquipment.ContentId < 0)
-            {
-                Masquerade.Logger.Warning($"ModEquipment {modEquipment.FullName} has no instance id attached!");
-                return null;
-            }
-            var character = _characters.SingleOrDefault(x => x.HasEquipment(modEquipment.ContentId));
-            if (character == null)
-            {
-                Masquerade.Logger.Warning($"No character owns ModEquipment {modEquipment.FullName}");
-                return null;
-            }
-
-            return character;
-        }
-
-        public bool IsModdedContent(int typeId)
-        {
-            if (AccessoryFactory.DoesContentExist(typeId))
-                return true;
-
-            return false;
+            return AccessoryFactory.DoesEquipmentExist(weaponTypeId);
         }
 
         public bool IsContentAccessory(int contentId)
         {
-            if (!IsModdedContent(contentId)) return false;
+            if (!IsModdedEquipment(contentId)) return false;
             
             return AccessoryFactory.DoesContentExist(contentId);
+        }
+
+        public bool IsContentCharacterEffect(int contentId)
+        {
+            if (!IsModdedEquipment(contentId)) return false;
+
+            return CharacterEffectFactory.DoesContentExist(contentId);
         }
     }
 }

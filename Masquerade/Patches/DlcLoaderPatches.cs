@@ -11,9 +11,9 @@ using Il2CppVampireSurvivors.Graphics;
 using Il2CppVampireSurvivors.Objects;
 using Il2CppVampireSurvivors.Objects.Weapons;
 using Il2CppZenject;
+using Masquerade.Equipment;
 using Masquerade.Examples;
 using Masquerade.Models;
-using Masquerade.Systems;
 using Masquerade.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -32,28 +32,28 @@ namespace Masquerade.Patches
         public static bool PreLoadDlc(DlcLoader __instance, DlcType dlcType, Action<BundleManifestData> onComplete)
         {
             if (dlcType != Common.VSML_DLC_TYPE) return true;
-            Masquerade.Logger.Msg("<DLCLoader.LoadDlc> dlcType:" + dlcType);
+            LoggerHelper.Logger.Msg("<DLCLoader.LoadDlc> dlcType:" + dlcType);
             DlcLoader.ResetLoader();
             var dlcNullable = new Il2CppSystem.Nullable<DlcType>(Common.VSML_DLC_TYPE);
             dlcNullable.value = dlcType;
             DlcLoader._dlcType = dlcNullable;
             DlcLoader._onComplete = onComplete;
             DlcLoader.UpdateProgress();
-            Masquerade.Logger.Msg("<DLCLoader.LoadDlc> pointed At DLC " + dlcType);
+            LoggerHelper.Logger.Msg("<DLCLoader.LoadDlc> pointed At DLC " + dlcType);
 
             Action<BundleManifestData> action = (bmd) =>
             {
-                Masquerade.Logger.Msg("<DLCLoader.LoadDlc> LoadManifest on complete");
+                LoggerHelper.Logger.Msg("<DLCLoader.LoadDlc> LoadManifest on complete");
                 DlcLoader._manifestState = ((!DlcLoader.DidTaskError(DlcLoader._manifestState)) ? DlcLoadState.Complete : DlcLoadState.Error);
                 DlcLoader._manifest = bmd;
                 DlcLoader._locationsState = DlcLoadState.Complete;
                 LoadSprites();
                 DlcLoader._spritesState = DlcLoadState.Complete;
                 DlcLoader.UpdateProgress();
-                Masquerade.Logger.Msg("Successfully loaded modded dlc bundle!");
+                LoggerHelper.Logger.Msg("Successfully loaded modded dlc bundle!");
             };
             BundleManifestData modDlcData = CreateBundle();
-            Masquerade.Logger.Msg("Created modded dlc bundle.");
+            LoggerHelper.Logger.Msg("Created modded dlc bundle.");
 
             ManifestLoader.LoadManifest(modDlcData, Common.VSML_DLC_TYPE, action);
             LanguageData = null;
@@ -68,7 +68,7 @@ namespace Masquerade.Patches
 
         private static void LoadSprites()
         {
-            var manifest = Masquerade.ResourceManifest;
+            var manifest = Masquerade.Instance.ResourceManifest;
             var root = "Masquerade.";
             var examplesPath = "Examples.";
             foreach (var resource in manifest)
@@ -92,12 +92,12 @@ namespace Masquerade.Patches
             var modDlcData = ScriptableObject.CreateInstance<BundleManifestData>();
             modDlcData._Version = Common.BMD_VERSION; modDlcData.name = Common.BMD_NAME;
             modDlcData._DataFiles = PopulateDataSettings();
-            if (!Masquerade.IgnoreWeaponsGlobal)
+            if (!Masquerade.Instance.IgnoreWeaponsGlobal)
             {
                 LanguageData = LocalizationManager.Sources._items.First();
                 modDlcData._AccessoriesFactory = PopulateAccessories();
             }
-            if (Masquerade.ShouldLoadMusic)
+            if (Masquerade.Instance.ShouldLoadMusic)
             {
                 MusicAdder(modDlcData);
             }
@@ -108,7 +108,7 @@ namespace Masquerade.Patches
         {
             var settings = new DataManagerSettings();
 
-            if (!Masquerade.IgnoreWeaponsGlobal)
+            if (!Masquerade.Instance.IgnoreWeaponsGlobal)
             {
                 settings._WeaponDataJsonAsset = PopulateWeaponData(null);
             }
@@ -122,7 +122,7 @@ namespace Masquerade.Patches
             var dict = new Dictionary<MasqMod, IEnumerable<ModEquipment>>();
             dict.Add(Masquerade.Instance, Masquerade.Api.AccessoryFactory.GetAllContent());
 
-            var generation = WeaponDataSystem.GenerateCustomWeaponData(dict);
+            var generation = WeaponDataHelper.GenerateCustomWeaponData(dict);
             var weaponData = new TextAsset(JsonConvert.SerializeObject(generation));
 
             return weaponData;
@@ -144,7 +144,7 @@ namespace Masquerade.Patches
         private static Accessory CreateBaseAccessory(ModAccessory template)
         {
             var acc = ProjectContext.Instance.Container.InstantiateComponentOnNewGameObject<Accessory>();
-            var contentName = template.ContentId.ToString();
+            var contentName = template.WeaponTypeId.ToString();
             SetLanguageData(template, acc, contentName);
 
             return acc;
@@ -160,12 +160,16 @@ namespace Masquerade.Patches
             descLoc.SetTranslation(0, template.Description);
             var tipsLoc = LanguageData.AddTerm(prefix + "tips");
             tipsLoc.SetTranslation(0, template.Tips);
+            if (template.LevelingManager.GetDataAtLevel(2).Any(x => x.Name?.Equals(WeaponDataNames.CustomDescription) ?? false)) {
+                var customLoc = LanguageData.AddTerm(prefix + WeaponDataNames.CustomDescription);
+                customLoc.SetTranslation(0, template.LevelingManager.GetDataAtLevel(2).Single(x => x.Name.Equals(WeaponDataNames.CustomDescription)).ValueString);
+            }
         }
 
         private static void MusicAdder(BundleManifestData manifestData)
         {
-            TextAsset textAsset = new TextAsset(Masquerade.MusicJson);
-            TextAsset albumAsset = new TextAsset(Masquerade.AlbumJson);
+            TextAsset textAsset = new TextAsset(Masquerade.Instance.MusicJson);
+            TextAsset albumAsset = new TextAsset(Masquerade.Instance.AlbumJson);
             manifestData.DataFiles._MusicDataJsonAsset = textAsset;
             manifestData._DynamicSoundGroup = DynamicSoundGroupFactory.DefaultModdedGroup();
             manifestData.DataFiles._AlbumDataJsonAsset = albumAsset;
