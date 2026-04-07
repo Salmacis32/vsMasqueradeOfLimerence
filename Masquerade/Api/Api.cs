@@ -1,4 +1,5 @@
-﻿using Il2CppVampireSurvivors.Data;
+﻿using Il2CppVampireSurvivors.App.Tools;
+using Il2CppVampireSurvivors.Data;
 using Il2CppVampireSurvivors.Data.Weapons;
 using Il2CppVampireSurvivors.Objects;
 using Il2CppVampireSurvivors.Objects.Characters;
@@ -52,8 +53,9 @@ namespace Masquerade.Api
 
         internal IEnumerable<CharacterContainer> GetCharacterInstances() => _characters;
 
-        internal CharacterContainer GetOrAddCharacterInstance(CharacterController controller, GlobalInstanceComponent component, bool resync = true)
+        internal CharacterContainer GetOrAddCharacterInstance(CharacterController controller, bool resync = true)
         {
+            var component = controller.gameObject.GetOrAddComponent<GlobalInstanceComponent>();
             var instanceId = component.GlobalInstanceId;
             if (instanceId >= 0 && _characters.Any(x => x.InstanceId == instanceId))
             {

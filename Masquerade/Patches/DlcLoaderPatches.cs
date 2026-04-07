@@ -68,13 +68,18 @@ namespace Masquerade.Patches
 
         private static void LoadSprites()
         {
-            var manifest = Masquerade.AssemblyInstance.GetManifestResourceNames();
-            var rootPath = "Masquerade.Examples.";
+            var manifest = Masquerade.ResourceManifest;
+            var root = "Masquerade.";
+            var examplesPath = "Examples.";
             foreach (var resource in manifest)
             {
                 if (!Path.GetExtension(resource).Contains("png"))
                     continue;
-                var name = (resource.Contains(rootPath)) ? resource.Substring(rootPath.Length) : resource;
+                string rootPath = string.Empty;
+                if (resource.Contains(root)) rootPath += root;
+                if (resource.Contains(examplesPath)) rootPath += examplesPath;
+                var name = resource.Substring(rootPath.Length);
+
                 var texture = TextureHelpers.LoadImageToTexture2d(Masquerade.AssemblyInstance, rootPath, name);
                 var sprite = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
                 sprite.name = Path.GetFileNameWithoutExtension(name);

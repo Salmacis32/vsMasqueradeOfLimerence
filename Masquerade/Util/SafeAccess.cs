@@ -29,6 +29,25 @@ namespace Masquerade.Util
             }
         }
 
+        public static T GetField<T>(object il2cppObject, string fieldName, T defaultValue = default(T))
+        {
+            try
+            {
+                if (il2cppObject == null) return defaultValue;
+
+                var property = il2cppObject.GetType().GetField(fieldName);
+                if (property == null) return defaultValue;
+
+                var value = property.GetValue(il2cppObject);
+                return value is T typedValue ? typedValue : defaultValue;
+            }
+            catch (Exception ex)
+            {
+                MelonLogger.Warning($"Attempted to access field {fieldName}: {ex.Message}");
+                return defaultValue;
+            }
+        }
+
         public static void SetProperty<T>(object il2cppObject, string propertyName, T value)
         {
             try

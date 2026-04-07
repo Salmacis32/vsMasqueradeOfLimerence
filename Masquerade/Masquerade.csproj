@@ -40,6 +40,7 @@
 	<ItemGroup>
 	  <None Remove="Examples\ExampleAccessory.png" />
 	  <None Remove="Examples\ExampleAlbum.png" />
+	  <None Remove="MissingSprite.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -54,10 +55,10 @@
 		<Compile Include="Equipment\EquipmentStats.cs" />
 		<Compile Include="Equipment\EquipmentDefaults.cs" />
 		<Compile Include="Equipment\LevelingManager.cs" />
-		<Compile Include="Equipment\LevelUpEvent.cs" />
 		<Compile Include="Equipment\WeaponDataNames.cs" />
 		<Compile Include="CharacterContainer.cs" />
-		<Compile Include="ModCharacterEffects.cs" />
+		<Compile Include="Examples\ExampleEffectAccessory.cs" />
+		<Compile Include="ModCharacterEffect.cs" />
 		<Compile Include="Models\DynamicSoundGroupFactory.cs" />
 		<Compile Include="Models\IContainer.cs" />
 		<Compile Include="Models\IInstanced.cs" />
@@ -233,6 +234,7 @@
 	<ItemGroup>
 	  <EmbeddedResource Include="Data\albumData_Modded.json" />
 	  <EmbeddedResource Include="Examples\ExampleAlbum.png" />
+	  <EmbeddedResource Include="MissingSprite.png" />
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">

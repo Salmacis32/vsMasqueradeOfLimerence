@@ -1,11 +1,13 @@
 ﻿using AudioImportLib;
 using HarmonyLib;
+using Il2CppVampireSurvivors.Graphics;
 using Masquerade;
 using Masquerade.Api;
 using Masquerade.Models;
 using MelonLoader;
 using MelonLoader.Utils;
 using System.Reflection;
+using UnityEngine;
 
 [assembly: MelonInfo(typeof(Masquerade.Masquerade), Common.VSML_TITLE, Common.BMD_VERSION, "Mercy", null)]
 [assembly: MelonGame("poncle", "Vampire Survivors")]
@@ -28,6 +30,7 @@ namespace Masquerade
         internal static Assembly AssemblyInstance;
         internal static HarmonyLib.Harmony PatcherInstance;
         internal static IEnumerable<IClassPatcher> Patchers;
+        internal static IEnumerable<string> ResourceManifest;
         internal static MelonLogger.Instance Logger;
         public static bool MasqueradeInitialized { get; private set; }
         public static MasqueradeApi Api { get; private set; }
@@ -36,6 +39,7 @@ namespace Masquerade
         public static bool IgnoreWeaponsGlobal { get; private set; }
         public static bool PreloadedDLC { get; private set; }
         public static readonly bool ShouldLoadMusic = true;
+        public static readonly bool LogMethodPatches = true;
 
 
         public override void OnDeinitializeMelon()
@@ -48,6 +52,7 @@ namespace Masquerade
             MasqueradeInitialized = false;
             Api = null;
             Instance = null;
+            ResourceManifest = null;
             CurrentContentId = Common.CONTENT_START_ID;
 
             LoggerInstance.Msg("Deinitialize Complete.");
@@ -64,6 +69,7 @@ namespace Masquerade
             PatcherInstance = HarmonyInstance;
             Logger = LoggerInstance;
             Api = new MasqueradeApi();
+            ResourceManifest = AssemblyInstance.GetManifestResourceNames();
 
             LoggerInstance.Msg("Variables created.");
 
@@ -137,6 +143,11 @@ namespace Masquerade
                 {
                     accessory.Mod = mod;
                     accessory.ContentId = CurrentContentId; CurrentContentId++;
+                    if (!ResourceManifest.Any(x => x.Contains(accessory.TextureName))) // Make this properly distinguish between texture and sprite name later
+                    {
+                        Logger.Warning($"Was unable to find {accessory.TextureName}.png registered in the SpriteManager! Resetting to default.");
+                        accessory.TextureName = Common.MISSING_TEXTURE;
+                    }
                     Api.AccessoryFactory.AddContent(accessory);
                     LoggerInstance.Msg($"Added accessory {accessory.FullName}");
                     accessories.Add(accessory);
@@ -164,7 +175,13 @@ namespace Masquerade
                     PatcherInstance.Patch(method, prefix: new HarmonyMethod(instruction.PatchMethod));
                 else
                     PatcherInstance.Patch(method, postfix: new HarmonyMethod(instruction.PatchMethod));
+
                 patched++;
+
+                if (LogMethodPatches)
+                {
+                    Logger.Msg($"Patched {method.DeclaringType.Name}.{method.Name} with {instruction.PatchMethod.Name} at {((instruction.IsPrefix) ? "Prefix" : "Postfix")}");
+                }
             }
 
             return patched;

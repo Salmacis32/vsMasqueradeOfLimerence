@@ -1,4 +1,5 @@
-﻿using Masquerade.Equipment;
+﻿using Il2CppVampireSurvivors.Objects.Characters;
+using Masquerade.Equipment;
 
 namespace Masquerade
 {
@@ -13,9 +14,9 @@ namespace Masquerade
 
         public override int MaxLevel => EquipmentDefaults.MaxAccessoryLevel;
 
-        public virtual void OnAccessoryAdded(CharacterContainer character) { }
+        public virtual void OnAccessoryAdded(CharacterContainer character, CharacterController controller) { }
         public virtual void OnAccessoryRemoved(CharacterContainer character) { }
 
-        public virtual void OnLevelUp() { }
+        public virtual void OnLevelUp(CharacterController controller) { }
     }
 }

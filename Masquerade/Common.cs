@@ -7,7 +7,9 @@ namespace Masquerade
         public const string VSML_TITLE = "Masquerade of Limerance";
         public const string BMD_NAME = "BundleManifestData - Masquerade";
         public const string BMD_VERSION = "0.0.111";
+        
         public const string BMD_LOG = VSML_TITLE + " - Version ";
+        public const string MISSING_TEXTURE = "MissingSprite";
         public const DlcType VSML_DLC_TYPE = (DlcType)10000;
         public static bool ModLoaded;
         public const int MUSIC_START_ID = 1410;

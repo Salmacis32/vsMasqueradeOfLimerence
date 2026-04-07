@@ -34,7 +34,7 @@ namespace Masquerade
         public virtual int MaxLevel { get; protected set; }
         public virtual int Price { get; protected set; } = EquipmentDefaults.Price;
         public virtual ShopTags ShopTags { get; protected set; }
-        public virtual string TextureName { get; protected set; }
+        public virtual string TextureName { get; internal set; }
 
         public virtual string Tips { get; protected set; } = "";
 

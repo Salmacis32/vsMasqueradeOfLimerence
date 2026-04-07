@@ -7,14 +7,14 @@ namespace Masquerade
     {
         private HashSet<EquipmentContainer> _equipment;
 
-        private HashSet<ModCharacterEffects> _modEffects;
+        private HashSet<ModCharacterEffect> _modEffects;
 
         private HashSet<ModEquipment> _modEquipment;
 
         public CharacterContainer()
         {
             _modEquipment = new HashSet<ModEquipment>();
-            _modEffects = new HashSet<ModCharacterEffects>();
+            _modEffects = new HashSet<ModCharacterEffect>();
             _equipment = new HashSet<EquipmentContainer>();
         }
 
@@ -72,6 +72,21 @@ namespace Masquerade
         public bool HasEquipmentInstance(int instanceId) => _equipment.Any(x => x.InstanceId == instanceId);
 
         public bool HasEquipment<T>() where T : ModEquipment => _modEquipment.Any(x => x.GetType() == typeof(T));
+
+        public bool HasEffect<T>() where T : ModCharacterEffect => _modEffects.Any(x => x.GetType() == typeof(T));
+
+        public bool HasEffect(Type type) => _modEffects.Any(x => x.GetType() == type);
+
+        public void AddModEffect(ModCharacterEffect effect, bool canStack)
+        {
+            if (!canStack && HasEffect(effect.GetType()))
+            {
+                Masquerade.Logger.Warning($"Character already has an instance of {effect.FullName}.");
+                return;
+            }
+
+            _modEffects.Add(effect);
+        }
 
         internal void AddEquipmentContainer(EquipmentContainer container)
         {
