@@ -9,7 +9,8 @@ namespace Masquerade.Patches
         {
             return new List<PatchInstruction>()
             {
-                new PatchInstruction(TargetClass, nameof(CharacterController.InternalUpdate), GetType().GetMethod(nameof(PostInternalUpdate)), prefix: false)
+                new PatchInstruction(TargetClass, nameof(CharacterController.InternalUpdate), GetType().GetMethod(nameof(PostInternalUpdate)), prefix: false),
+                new PatchInstruction(TargetClass, nameof(CharacterController.ResetStats), GetType().GetMethod(nameof(PreResetStats)), prefix: true)
             };
         }
 
@@ -19,6 +20,11 @@ namespace Masquerade.Patches
                 return;
 
             Masquerade.Instance.ModEffectSystem.InternalUpdateEffects(__instance);
+        }
+
+        public static void PreResetStats(CharacterController __instance)
+        {
+            Masquerade.Instance.ModEffectSystem.ResetCharacterEffects(__instance);
         }
     }
 }

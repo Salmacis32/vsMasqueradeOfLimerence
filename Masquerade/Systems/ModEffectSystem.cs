@@ -1,5 +1,4 @@
-﻿using Il2CppVampireSurvivors.App.Tools;
-using Il2CppVampireSurvivors.Objects.Characters;
+﻿using Il2CppVampireSurvivors.Objects.Characters;
 using Masquerade.Models;
 using Masquerade.Util;
 
@@ -47,7 +46,7 @@ namespace Masquerade.Systems
 
         internal void InternalUpdateEffects(CharacterController controller)
         {
-            if (!TryGetInstanceId(controller, out int instanceId) || instanceId < 0) return;
+            if (!Instances.Any() || !TryGetInstanceId(controller, out int instanceId) || instanceId < 0 || !Instances.Keys.Any(x => x == instanceId)) return;
             foreach (var effect in Instances[instanceId])
             {
                 effect.OnUpdate(controller);
