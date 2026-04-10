@@ -23,7 +23,7 @@ namespace Masquerade.Util
         /// <summary>
         /// Return as Normal List
         /// </summary>
-        public static IList<T> ToSystemList<T>(this Il2Col.List<T> list)
+        public static List<T> ToSystemList<T>(this Il2Col.List<T> list)
         {
             var sysList = new List<T>();
             foreach (var item in list)

@@ -235,6 +235,9 @@
 	  <Reference Include="UnityEngine.ImageConversionModule">
 	    <HintPath>$(VSPath)\MelonLoader\Il2CppAssemblies\UnityEngine.ImageConversionModule.dll</HintPath>
 	  </Reference>
+	  <Reference Include="UnityEngine.UI">
+	    <HintPath>R:\SteamLibrary\steamapps\common\Vampire Survivors\MelonLoader\Il2CppAssemblies\UnityEngine.UI.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 
 	<ItemGroup>

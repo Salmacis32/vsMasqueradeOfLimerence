@@ -32,7 +32,7 @@ namespace Masquerade.Util
         /// <typeparam name="T"></typeparam>
         /// <param name="enumerable"></param>
         /// <returns></returns>
-        public static IList<T> ToSystemList<T>(this Il2Col.IEnumerable<T> enumerable)
+        public static List<T> ToSystemList<T>(this Il2Col.IEnumerable<T> enumerable)
         {
             var enumerator = enumerable.ToList();
 
