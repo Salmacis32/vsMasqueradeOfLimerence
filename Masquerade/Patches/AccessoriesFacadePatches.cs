@@ -1,22 +1,17 @@
-﻿using Il2CppDoozy.Engine.UI.Animation;
-using Il2CppVampireSurvivors.Data;
+﻿using Il2CppVampireSurvivors.Data;
 using Il2CppVampireSurvivors.Framework;
 using Il2CppVampireSurvivors.Objects;
 using Il2CppVampireSurvivors.Objects.Algorithm;
 using Il2CppVampireSurvivors.Objects.Characters;
 using Il2CppVampireSurvivors.Signals;
-using Il2CppZenject;
-using Masquerade.Api;
 using Masquerade.Models;
 using Masquerade.Util;
 using UnityEngine;
 
 namespace Masquerade.Patches
 {
-    public class AccessoriesFacadePatches : IClassPatcher
+    public class AccessoriesFacadePatches : ClassPatcher<AccessoriesFacade>
     {
-        public Type TargetClass => typeof(AccessoriesFacade);
-
         public static bool PreOnAdded(AccessoriesFacade __instance, WeaponType accessoryType, CharacterController characterController, bool removeFromStore = true)
         {
             if (!Masquerade.Api.ModdedEquipmentCheck(accessoryType))
@@ -38,7 +33,7 @@ namespace Masquerade.Patches
             RemoveModdedInstances(accessoryType, characterController);
         }
 
-        public IEnumerable<PatchInstruction> GeneratePatchInstructions()
+        public override IEnumerable<PatchInstruction> GeneratePatchInstructions()
         {
             var ints = new List<PatchInstruction>()
             {
@@ -46,6 +41,24 @@ namespace Masquerade.Patches
                 new PatchInstruction(TargetClass, nameof(AccessoriesFacade.RemoveAccessory), typeof(AccessoriesFacadePatches).GetMethod(nameof(PreOnRemoved)), prefix: true),
             };
             return ints;
+        }
+
+        private static void CheckArcanas(AccessoriesFacade facade)
+        {
+            facade._arcanaManager.CheckSilent();
+        }
+
+        private static bool CheckLevelUp(WeaponType accessoryType, AccessoriesFacade facade, CharacterController characterController, bool remove)
+        {
+            Accessory accessoryByType = characterController.AccessoriesManager.GetAccessoryByType(accessoryType);
+            if (accessoryByType == null || accessoryByType.CurrentAccessoryData.allowDuplicates)
+                return false;
+
+            if (!accessoryByType.LevelUp())
+                facade._playerOptions.AddCoins(10f, characterController);
+            if (remove)
+                facade._levelUpFactory.RemoveFromStore(accessoryType, characterController);
+            return true;
         }
 
         private static void CreateModdedInstances(WeaponType accessoryType, CharacterController characterController)
@@ -60,31 +73,6 @@ namespace Masquerade.Patches
             var instance = Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container, characterController);
 
             instance.OnAccessoryAdded(characterController);
-        }
-
-        private static void RemoveModdedInstances(WeaponType accessoryType, CharacterController characterController)
-        {
-            var container = Masquerade.Api.GetOrAddCharacterInstance(characterController);
-            if (container == null)
-            {
-                LoggerHelper.Logger.Error("Character container failed to load!");
-                return;
-            }
-            Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container, characterController).OnAccessoryRemoved(characterController);
-            Masquerade.Api.DeleteEquipmentInstance((int)accessoryType, container);
-        }
-
-        private static bool CheckLevelUp(WeaponType accessoryType, AccessoriesFacade facade, CharacterController characterController, bool remove)
-        {
-            Accessory accessoryByType = characterController.AccessoriesManager.GetAccessoryByType(accessoryType);
-            if (accessoryByType == null || accessoryByType.CurrentAccessoryData.allowDuplicates)
-                return false;
-
-            if (!accessoryByType.LevelUp())
-                facade._playerOptions.AddCoins(10f, characterController);
-            if (remove)
-                facade._levelUpFactory.RemoveFromStore(accessoryType, characterController);
-            return true;
         }
 
         private static Accessory InstatiateAccessory(WeaponType accessoryType, AccessoriesFacade facade, CharacterController characterController, bool remove)
@@ -110,6 +98,7 @@ namespace Masquerade.Patches
             });
             return component;
         }
+
         private static void PostInstatiation(Accessory accessory, AccessoriesFacade facade, CharacterController characterController, bool removeFromStore = true)
         {
             if (removeFromStore)
@@ -126,9 +115,16 @@ namespace Masquerade.Patches
             CheckArcanas(facade);
         }
 
-        private static void CheckArcanas(AccessoriesFacade facade)
+        private static void RemoveModdedInstances(WeaponType accessoryType, CharacterController characterController)
         {
-            facade._arcanaManager.CheckSilent();
+            var container = Masquerade.Api.GetOrAddCharacterInstance(characterController);
+            if (container == null)
+            {
+                LoggerHelper.Logger.Error("Character container failed to load!");
+                return;
+            }
+            Masquerade.Api.GetOrAddModAccessoryInstance((int)accessoryType, container, characterController).OnAccessoryRemoved(characterController);
+            Masquerade.Api.DeleteEquipmentInstance((int)accessoryType, container);
         }
     }
 }

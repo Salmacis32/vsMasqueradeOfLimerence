@@ -3,11 +3,9 @@ using Masquerade.Models;
 
 namespace Masquerade.Patches
 {
-    public class CharacterControllerPatches : IClassPatcher
+    public class CharacterControllerPatches : ClassPatcher<CharacterController>
     {
-        public Type TargetClass => typeof(CharacterController);
-
-        public IEnumerable<PatchInstruction> GeneratePatchInstructions()
+        public override IEnumerable<PatchInstruction> GeneratePatchInstructions()
         {
             return new List<PatchInstruction>()
             {

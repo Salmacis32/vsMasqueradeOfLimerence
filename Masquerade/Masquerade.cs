@@ -123,7 +123,7 @@ namespace Masquerade
         private IEnumerable<IClassPatcher> InitializePatchers()
         {
             var patchers = new List<IClassPatcher>();
-            var types = AccessTools.GetTypesFromAssembly(AssemblyInstance).Where(x => x.GetInterface(nameof(IClassPatcher)) != null);
+            var types = AccessTools.GetTypesFromAssembly(AssemblyInstance).Where(x => x.GetInterface(nameof(IClassPatcher)) != null && !x.IsAbstract);
             foreach (var type in types)
             {
                 var instance = AccessTools.CreateInstance(type);

@@ -72,6 +72,7 @@
 		<Compile Include="Patches\AccessoryPatches.cs" />
 		<Compile Include="Patches\CharacterControllerPatches.cs" />
 		<Compile Include="Patches\GameManagerPatches.cs" />
+		<Compile Include="Patches\MainMenuPagePatches.cs" />
 		<Compile Include="Systems\ModEffectSystem.cs" />
 		<Compile Include="Util\Il2CppDictionaryExtensions.cs" />
 		<Compile Include="Util\Il2CppEnumerableExtensions.cs" />
@@ -91,7 +92,7 @@
 		<Compile Include="Models\ContentFactory.cs" />
 		<Compile Include="Equipment\ShopTags.cs" />
 		<Compile Include="Equipment\WeaponStatNames.cs" />
-		<Compile Include="Models\IClassPatcher.cs" />
+		<Compile Include="Models\ClassPatcher.cs" />
 		<Compile Include="ModAccessory.cs" />
 		<Compile Include="ModContent.cs" />
 		<Compile Include="MasqMod.cs" />

@@ -2,16 +2,13 @@
 using Il2CppVampireSurvivors.Framework.DLC;
 using Il2CppVampireSurvivors.Framework.Loading;
 using Masquerade.Models;
-using System.Data;
 using UnityEngine;
 
 namespace Masquerade.Patches
 {
-    public class LoadingManagerPatches : IClassPatcher
+    public class LoadingManagerPatches : ClassPatcher<LoadingManager>
     {
-        public Type TargetClass => typeof(LoadingManager);
-
-        public IEnumerable<PatchInstruction> GeneratePatchInstructions()
+        public override IEnumerable<PatchInstruction> GeneratePatchInstructions()
         {
             var instructions = new List<PatchInstruction>();
             instructions.Add(new PatchInstruction(TargetClass, nameof(LoadingManager.LoadDlcs), typeof(LoadingManagerPatches).GetMethod(nameof(PreLoadDlcs))));

@@ -1,33 +1,23 @@
-﻿using Harmony;
-using Il2Cpp;
-using Il2CppI2.Loc;
+﻿using Il2CppI2.Loc;
 using Il2CppVampireSurvivors.App.Data;
-using Il2CppVampireSurvivors.App.Tools;
 using Il2CppVampireSurvivors.Data;
-using Il2CppVampireSurvivors.Data.Weapons;
 using Il2CppVampireSurvivors.Framework;
 using Il2CppVampireSurvivors.Framework.DLC;
 using Il2CppVampireSurvivors.Graphics;
 using Il2CppVampireSurvivors.Objects;
-using Il2CppVampireSurvivors.Objects.Weapons;
 using Il2CppZenject;
 using Masquerade.Equipment;
-using Masquerade.Examples;
 using Masquerade.Models;
 using Masquerade.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Reflection;
-using System.Resources;
-using System.Xml.Linq;
 using UnityEngine;
 
 namespace Masquerade.Patches
 {
-    public class DlcLoaderPatches : IClassPatcher
+    public class DlcLoaderPatches : ClassPatcher<DlcLoader>
     {
         private static LanguageSourceData LanguageData;
-        public Type TargetClass => typeof(DlcLoader);
 
         public static bool PreLoadDlc(DlcLoader __instance, DlcType dlcType, Action<BundleManifestData> onComplete)
         {
@@ -60,10 +50,36 @@ namespace Masquerade.Patches
             return false;
         }
 
-        public IEnumerable<PatchInstruction> GeneratePatchInstructions()
+        public override IEnumerable<PatchInstruction> GeneratePatchInstructions()
         {
             var instructions = new List<PatchInstruction>() { new PatchInstruction(TargetClass, nameof(DlcLoader.LoadDlc), typeof(DlcLoaderPatches).GetMethod(nameof(PreLoadDlc))) };
             return instructions;
+        }
+
+        private static Accessory CreateBaseAccessory(ModAccessory template)
+        {
+            var acc = ProjectContext.Instance.Container.InstantiateComponentOnNewGameObject<Accessory>();
+            var contentName = template.WeaponTypeId.ToString();
+            SetLanguageData(template, acc, contentName);
+
+            return acc;
+        }
+
+        private static BundleManifestData CreateBundle()
+        {
+            var modDlcData = ScriptableObject.CreateInstance<BundleManifestData>();
+            modDlcData._Version = Common.BMD_VERSION; modDlcData.name = Common.BMD_NAME;
+            modDlcData._DataFiles = PopulateDataSettings();
+            if (!Masquerade.Instance.IgnoreWeaponsGlobal)
+            {
+                LanguageData = LocalizationManager.Sources._items.First();
+                modDlcData._AccessoriesFactory = PopulateAccessories();
+            }
+            if (Masquerade.Instance.ShouldLoadMusic)
+            {
+                MusicAdder(modDlcData);
+            }
+            return modDlcData;
         }
 
         private static void LoadSprites()
@@ -87,21 +103,28 @@ namespace Masquerade.Patches
             }
         }
 
-        private static BundleManifestData CreateBundle()
+        private static void MusicAdder(BundleManifestData manifestData)
         {
-            var modDlcData = ScriptableObject.CreateInstance<BundleManifestData>();
-            modDlcData._Version = Common.BMD_VERSION; modDlcData.name = Common.BMD_NAME;
-            modDlcData._DataFiles = PopulateDataSettings();
-            if (!Masquerade.Instance.IgnoreWeaponsGlobal)
+            TextAsset textAsset = new TextAsset(Masquerade.Instance.MusicJson);
+            TextAsset albumAsset = new TextAsset(Masquerade.Instance.AlbumJson);
+            manifestData.DataFiles._MusicDataJsonAsset = textAsset;
+            manifestData._DynamicSoundGroup = DynamicSoundGroupFactory.DefaultModdedGroup();
+            manifestData.DataFiles._AlbumDataJsonAsset = albumAsset;
+            manifestData._AssetReferenceLibrary = new AssetReferenceLibrary();
+            manifestData._AssetReferenceLibrary._AssetRefs = new AssetReferenceLibrary.AssetRefsDictionary();
+        }
+
+        private static AccessoriesFactory PopulateAccessories()
+        {
+            var factory = ScriptableObject.CreateInstance<AccessoriesFactory>();
+            var content = Masquerade.Api.AccessoryFactory.GetAllContent();
+
+            foreach (var item in content)
             {
-                LanguageData = LocalizationManager.Sources._items.First();
-                modDlcData._AccessoriesFactory = PopulateAccessories();
+                factory._accessories.Add((WeaponType)item.ContentId, CreateBaseAccessory(item));
             }
-            if (Masquerade.Instance.ShouldLoadMusic)
-            {
-                MusicAdder(modDlcData);
-            }
-            return modDlcData;
+
+            return factory;
         }
 
         private static DataManagerSettings PopulateDataSettings()
@@ -128,28 +151,6 @@ namespace Masquerade.Patches
             return weaponData;
         }
 
-        private static AccessoriesFactory PopulateAccessories()
-        {
-            var factory = ScriptableObject.CreateInstance<AccessoriesFactory>();
-            var content = Masquerade.Api.AccessoryFactory.GetAllContent();
-
-            foreach (var item in content)
-            {
-                factory._accessories.Add((WeaponType)item.ContentId, CreateBaseAccessory(item));
-            }
-            
-            return factory;
-        }
-
-        private static Accessory CreateBaseAccessory(ModAccessory template)
-        {
-            var acc = ProjectContext.Instance.Container.InstantiateComponentOnNewGameObject<Accessory>();
-            var contentName = template.WeaponTypeId.ToString();
-            SetLanguageData(template, acc, contentName);
-
-            return acc;
-        }
-
         private static void SetLanguageData(ModAccessory template, Accessory acc, string contentName)
         {
             var prefix = "weaponLang/{" + contentName + "}";
@@ -160,21 +161,11 @@ namespace Masquerade.Patches
             descLoc.SetTranslation(0, template.Description);
             var tipsLoc = LanguageData.AddTerm(prefix + "tips");
             tipsLoc.SetTranslation(0, template.Tips);
-            if (template.LevelingManager.GetDataAtLevel(2).Any(x => x.Name?.Equals(WeaponDataNames.CustomDescription) ?? false)) {
+            if (template.LevelingManager.GetDataAtLevel(2).Any(x => x.Name?.Equals(WeaponDataNames.CustomDescription) ?? false))
+            {
                 var customLoc = LanguageData.AddTerm(prefix + WeaponDataNames.CustomDescription);
                 customLoc.SetTranslation(0, template.LevelingManager.GetDataAtLevel(2).Single(x => x.Name.Equals(WeaponDataNames.CustomDescription)).ValueString);
             }
-        }
-
-        private static void MusicAdder(BundleManifestData manifestData)
-        {
-            TextAsset textAsset = new TextAsset(Masquerade.Instance.MusicJson);
-            TextAsset albumAsset = new TextAsset(Masquerade.Instance.AlbumJson);
-            manifestData.DataFiles._MusicDataJsonAsset = textAsset;
-            manifestData._DynamicSoundGroup = DynamicSoundGroupFactory.DefaultModdedGroup();
-            manifestData.DataFiles._AlbumDataJsonAsset = albumAsset;
-            manifestData._AssetReferenceLibrary = new AssetReferenceLibrary();
-            manifestData._AssetReferenceLibrary._AssetRefs = new AssetReferenceLibrary.AssetRefsDictionary();
         }
     }
 }

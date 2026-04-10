@@ -3,11 +3,9 @@ using Masquerade.Models;
 
 namespace Masquerade.Patches
 {
-    public class GameManagerPatches : IClassPatcher
+    public class GameManagerPatches : ClassPatcher<GameManager>
     {
-        public Type TargetClass => typeof(GameManager);
-
-        public IEnumerable<PatchInstruction> GeneratePatchInstructions()
+        public override IEnumerable<PatchInstruction> GeneratePatchInstructions()
         {
             return new PatchInstruction[] {
                 new PatchInstruction(TargetClass, nameof(GameManager.InitializeGameSessionPostLoad), this.GetType().GetMethod(nameof(PostInitializeGameSession)), prefix: false),

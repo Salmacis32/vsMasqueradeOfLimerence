@@ -1,15 +1,12 @@
 ﻿using HarmonyLib;
 using Il2CppVampireSurvivors.Objects;
-using Masquerade.Api;
 using Masquerade.Models;
 using Masquerade.Util;
 
 namespace Masquerade.Patches
 {
-    public class AccessoryPatches : IClassPatcher
+    public class AccessoryPatches : ClassPatcher<Accessory>
     {
-        public Type TargetClass => typeof(Accessory);
-
         public static void PostLevelUp(Accessory __instance)
         {
             if (!Masquerade.Api.ModdedEquipmentCheck(__instance.Type))
@@ -25,7 +22,7 @@ namespace Masquerade.Patches
             Masquerade.Api.GetOrAddModAccessoryInstance((int)__instance.Type, cont, owner).OnLevelUp(owner);
         }
 
-        public IEnumerable<PatchInstruction> GeneratePatchInstructions()
+        public override IEnumerable<PatchInstruction> GeneratePatchInstructions()
         {
             var test = AccessTools.GetDeclaredMethods(TargetClass);
             return new List<PatchInstruction>()
