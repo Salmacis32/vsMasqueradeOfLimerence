@@ -1,9 +1,19 @@
 {
   "profiles": {
-    "Profile 1": {
+    "Debug": {
       "commandName": "Executable",
       "executablePath": "R:\\SteamLibrary\\steamapps\\common\\Vampire Survivors\\VampireSurvivors.exe",
       "commandLineArgs": "--melonloader.launchdebugger\r\n--melonloader.debug"
+    },
+    "NoMods": {
+      "commandName": "Executable",
+      "executablePath": "R:\\SteamLibrary\\steamapps\\common\\Vampire Survivors\\VampireSurvivors.exe",
+      "commandLineArgs": "--no-mods\r\n"
+    },
+    "UnityLogsOn": {
+      "commandName": "Executable",
+      "executablePath": "R:\\SteamLibrary\\steamapps\\common\\Vampire Survivors\\VampireSurvivors.exe",
+      "commandLineArgs": "--melonloader.launchdebugger\r\n--melonloader.debug\r\n--melonloader.captureplayerlogs"
     }
   }
 }
